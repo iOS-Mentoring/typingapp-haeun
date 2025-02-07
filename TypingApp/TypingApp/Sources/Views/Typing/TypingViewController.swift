@@ -13,10 +13,9 @@ class TypingViewController: BaseViewController {
     
     private let placeholderTextView: UITextView = {
         let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.textColor = UIColor.gray300
-        textView.backgroundColor = UIColor.gray200
-        textView.font = UIFont.pretendard(type: .regular, size: 20)
+        textView.textColor = .gray300
+        textView.backgroundColor = .gray200
+        textView.font = .pretendard(type: .regular, size: 20)
         textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 10, right: 16)
         
         textView.isEditable = false
@@ -28,9 +27,9 @@ class TypingViewController: BaseViewController {
     
     private let typingTextView: UITextView = {
         let textView = UITextView()
-        textView.textColor = UIColor.gray300
+        textView.textColor = .gray300
         textView.backgroundColor = .clear
-        textView.font = UIFont.pretendard(type: .regular, size: 20)
+        textView.font = .pretendard(type: .regular, size: 20)
         textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 10, right: 16)
         
         textView.becomeFirstResponder()
@@ -47,7 +46,7 @@ class TypingViewController: BaseViewController {
 
     private func setNavigationBar() {
         navigationBar.setTitle("하루필사")
-        navigationBar.setRightButton(title: "", image: UIImage.iconHistory)
+        navigationBar.setRightButton(image: UIImage.iconHistory)
     }
     
     private func setSpeedView() {

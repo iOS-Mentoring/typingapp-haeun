@@ -12,8 +12,8 @@ class CustomNavigationBar: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = UIFont.nanumMyeongjo(type: .bold, size: 22)
-        label.textColor = UIColor.primaryEmphasis
+        label.font = .nanumMyeongjo(type: .bold, size: 22)
+        label.textColor = .primaryEmphasis
         return label
     }()
     
@@ -46,13 +46,11 @@ class CustomNavigationBar: UIView {
         titleLabel.text = title
     }
     
-    func setLeftButton(title: String?, image: UIImage?) {
-        leftButton.setTitle(title, for: .normal)
+    func setLeftButton(image: UIImage?) {
         leftButton.setImage(image, for: .normal)
     }
     
-    func setRightButton(title: String?, image: UIImage?) {
-        rightButton.setTitle(title, for: .normal)
+    func setRightButton(image: UIImage?) {
         rightButton.setImage(image, for: .normal)
     }
     

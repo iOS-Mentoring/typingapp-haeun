@@ -11,7 +11,7 @@ class TypingSpeedView: UIView {
     
     private let wpmLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.pretendard(type: .light, size: 13)
+        label.font = .pretendard(type: .light, size: 13)
         label.textColor = .white
         
         let text = "WPM "
@@ -26,7 +26,7 @@ class TypingSpeedView: UIView {
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.pretendard(type: .regular, size: 13)
+        label.font = .pretendard(type: .regular, size: 13)
         
         label.text = "00:00:00"
         
@@ -35,7 +35,7 @@ class TypingSpeedView: UIView {
     
     private let gageView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.primaryRed
+        view.backgroundColor = .primaryRed
         return view
     }()
     

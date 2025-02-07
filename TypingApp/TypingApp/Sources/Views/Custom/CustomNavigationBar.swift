@@ -13,7 +13,7 @@ class CustomNavigationBar: UIView {
         let label = UILabel()
         label.textAlignment = .center
         label.font = UIFont.nanumMyeongjo(type: .bold, size: 22)
-        label.textColor = UIColor(hexCode: "111111", alpha: 1)
+        label.textColor = UIColor.primaryEmphasis
         return label
     }()
     

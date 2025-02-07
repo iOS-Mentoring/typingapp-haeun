@@ -9,6 +9,7 @@ import UIKit
 
 class TypingViewController: BaseViewController {
     private let speedView = TypingSpeedView()
+    private let typingInputAccessoryView = TypingInputAccessoryView()
     
     private let placeholderTextView: UITextView = {
         let textView = UITextView()
@@ -61,5 +62,7 @@ class TypingViewController: BaseViewController {
             .trailingEqual(to: placeholderTextView, constant: 0),
             .bottomEqual(to: placeholderTextView, constant: 0)
         ])
+        
+        typingTextView.inputAccessoryView = typingInputAccessoryView
     }
 }

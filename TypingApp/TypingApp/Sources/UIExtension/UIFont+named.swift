@@ -7,8 +7,6 @@
 
 import UIKit
 
-//import YDShare
-
 public enum FontFamily {
     public enum PretendardType: String {
         case black = "Black"

@@ -5,22 +5,20 @@
 //  Created by 류연수 on 2/2/25.
 //
 
-//import UIKit
-//
-//import YDShare
-//
-//public extension UIImage {
-//    
-//    static let iconBookmark = YDShareAsset.iconBookmark.image.withRenderingMode(.alwaysOriginal)
-//    static let iconBookmarkFill = YDShareAsset.iconBookmarkFill.image.withRenderingMode(.alwaysOriginal)
-//    static let iconClose = YDShareAsset.iconClose.image.withRenderingMode(.alwaysOriginal)
-//    static let iconDoubleQuotes = YDShareAsset.iconDoubleQuotes.image.withRenderingMode(.alwaysOriginal)
-//    static let iconInverseDownload = YDShareAsset.iconInverseDownload.image.withRenderingMode(.alwaysOriginal)
-//    static let iconInverseShare = YDShareAsset.iconInverseShare.image.withRenderingMode(.alwaysOriginal)
-//    static let iconLink = YDShareAsset.iconLink.image.withRenderingMode(.alwaysOriginal)
-//    static let iconHistory = YDShareAsset.iconHistory.image.withRenderingMode(.alwaysOriginal)
-//    static let iconLeftArrow = YDShareAsset.iconLeftArrow.image.withRenderingMode(.alwaysOriginal)
-//    
-//    static let illustHaruHalf = YDShareAsset.illustHaruHalf.image.withRenderingMode(.alwaysOriginal)
-//    static let illustHaruWhole = YDShareAsset.illustHaruWhole.image.withRenderingMode(.alwaysOriginal)
-//}
+import UIKit
+
+public extension UIImage {
+    
+    static let iconBookmark = UIImage(named: "icon_bookmark")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconBookmarkFill = UIImage(named: "icon_bookmark_fill")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconClose = UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconDoubleQuotes = UIImage(named: "icon_double_quotes")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconInverseDownload = UIImage(named: "icon_inverse_download")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconInverseShare = UIImage(named: "icon_inverse_share")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconLink = UIImage(named: "icon_link")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconHistory = UIImage(named: "icon_history")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconLeftArrow = UIImage(named: "icon_left_arrow")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    
+    static let illustHaruHalf = UIImage(named: "illust_haru_half")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let illustHaruWhole = UIImage(named: "illust_haru_whole")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+}

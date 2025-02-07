@@ -16,4 +16,3 @@ class TypingViewController: UIViewController {
 
 
 }
-

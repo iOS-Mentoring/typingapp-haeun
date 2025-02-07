@@ -19,7 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: scene)
-        window.rootViewController = TypingViewController()
+        let viewController = TypingViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.navigationBar.titleTextAttributes = [.font: UIFont.nanumMyeongjo(type: .bold, size: 22),
+                                                                  .foregroundColor: UIColor(hexCode: "111111", alpha: 1) ?? UIColor.primaryEmphasis
+         ]
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
         self.window = window
     }

@@ -45,12 +45,23 @@ class TypingViewController: BaseViewController {
     }
 
     private func setNavigationBar() {
-        navigationBar.setTitle("하루필사")
-        navigationBar.setRightButton(image: UIImage.iconHistory)
+        title = "하루필사"
+        
+        let historyButton = UIBarButtonItem(
+            image: .iconHistory,
+            style: .plain,
+            target: self,
+            action: #selector(historyButtonTapped)
+        )
+        navigationItem.rightBarButtonItem = historyButton
+    }
+    
+    @objc private func historyButtonTapped() {
+        
     }
     
     private func setSpeedView() {
-        view.addSubview(speedView, autoLayout: [.topNext(to: navigationBar, constant: 0), .leading(0), .trailing(0), .height(30)])
+        view.addSubview(speedView, autoLayout: [.topSafeArea(0), .leading(0), .trailing(0), .height(30)])
     }
     
     private func setTextView() {

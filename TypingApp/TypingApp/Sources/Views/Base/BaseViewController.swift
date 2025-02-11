@@ -8,16 +8,23 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-    let navigationBar = CustomNavigationBar()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .gray200
         setupNavigationBar()
     }
     
     private func setupNavigationBar() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        view.addSubview(navigationBar, autoLayout: [.topSafeArea(0), .leading(0), .trailing(0), .height(60)])
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        
+        appearance.titleTextAttributes = [
+            .font: UIFont.nanumMyeongjo(type: .bold, size: 22),
+            .foregroundColor: UIColor.primaryEmphasis
+        ]
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }

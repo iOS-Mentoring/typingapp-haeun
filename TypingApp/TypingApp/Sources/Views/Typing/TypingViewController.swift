@@ -57,7 +57,8 @@ class TypingViewController: BaseViewController {
     }
     
     @objc private func historyButtonTapped() {
-        
+        let historyViewController = HistoryViewController()
+        navigationController?.pushViewController(historyViewController, animated: true)
     }
     
     private func setSpeedView() {

@@ -27,4 +27,16 @@ class BaseViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
+    
+    func setupBackButton() {
+        let backButton = UIBarButtonItem(image: .iconLeftArrow,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
 }

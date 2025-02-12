@@ -61,4 +61,8 @@ class TypingInputAccessoryView: UIView {
         addSubview(stackView, autoLayout: [.leading(20), .centerY(0)])
         addSubview(linkButton, autoLayout: [.trailing(20), .centerY(0)])
     }
+    
+    func setLinkButtonAction(_ action: Selector) {
+        linkButton.addTarget(self.superview?.next, action: action, for: .touchUpInside)
+    }
 }

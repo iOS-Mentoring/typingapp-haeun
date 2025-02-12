@@ -27,8 +27,7 @@ class TypingSpeedView: UIView {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 13)
-        
-        label.text = "00:00:00"
+        label.textColor = .white
         
         return label
     }()
@@ -55,4 +54,7 @@ class TypingSpeedView: UIView {
         addSubview(timeLabel, autoLayout: [.trailing(20), .centerY(0)])
     }
     
+    func updateTimeLabel(_ text: String) {
+        timeLabel.text = text
+    }
 }

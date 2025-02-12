@@ -7,10 +7,12 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class TypingViewModel {
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
+    @Published private(set) var attributedText = NSAttributedString()
     
     let placeholderText: String
     private var startTime: Date?
@@ -21,10 +23,72 @@ class TypingViewModel {
         self.placeholderText = placeholderText
     }
     
-    func processInput(_ inputText: String) {
-        if startTime == nil { startTimer() }
+    func processInput(_ inputText: NSAttributedString) {
+        if startTime == nil {
+            startTimer()
+        }
         
-        // TODO: inputText 와 placeholderText 비교하여 올바른 character 입력했는지 확인
+        let inputWords = inputText.string.components(separatedBy: " ")
+        let targetWords = placeholderText.components(separatedBy: " ")
+        correctCharacterCount = 0
+        var incorrectRanges: [NSRange] = []
+        
+        var currentLocation = 0
+        for (index, inputWord) in inputWords.enumerated() {
+            if index >= targetWords.count {
+                timer?.cancel()
+            }
+            
+            let targetWord = targetWords[index]
+            
+            // 자모음 단위로 분해하여 비교
+            let decomposedInput = inputWord.decompose()
+            let decomposedTarget = targetWord.decompose()
+            
+            // 분해된 자모음 단위로 정확한 문자 수 카운트
+            let correctJamo = zip(decomposedInput, decomposedTarget)
+                .filter { $0.0 == $0.1 }
+                .count
+            
+            // 단어가 완전히 일치하지 않으면 해당 범위를 틀린 것으로 표시
+            if inputWord != targetWord {
+                let range = NSRange(location: currentLocation, length: inputWord.count)
+                incorrectRanges.append(range)
+            }
+            
+            correctCharacterCount += correctJamo
+            
+            currentLocation += inputWord.count
+            if index < inputWords.count - 1 {
+                currentLocation += 1
+            }
+        }
+        
+        attributedText = createAttributedString(from: inputText, incorrectRanges: incorrectRanges)
+        updateWpm(from: startTime!)
+        
+    }
+    
+    private func createAttributedString(from text: NSAttributedString, incorrectRanges: [NSRange]) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(attributedString: text)
+        
+        // 기본 색상으로 설정
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor.primaryEmphasis,
+            range: NSRange(location: 0, length: text.string.count)
+        )
+        
+        // 틀린 부분 빨간색으로 설정
+        for range in incorrectRanges {
+            attributedString.addAttribute(
+                .foregroundColor,
+                value: UIColor.primaryRed,
+                range: range
+            )
+        }
+        
+        return attributedString
     }
     
     private func startTimer() {
@@ -33,7 +97,7 @@ class TypingViewModel {
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self = self,
-                let startTime = self.startTime else { return }
+                      let startTime = self.startTime else { return }
                 self.updateWpm(from: startTime)
             }
     }
@@ -50,5 +114,4 @@ class TypingViewModel {
         let wordsPerMinute = Double(correctCharacterCount) / timeElapsed * 60
         self.wpm = Int(wordsPerMinute)
     }
-    
 }

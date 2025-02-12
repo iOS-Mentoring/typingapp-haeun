@@ -100,11 +100,25 @@ class TypingViewController: BaseViewController {
                 self.speedView.updateTimeLabel(elapsedTimeString)
             }
             .store(in: &cancellables)
+        
+        viewModel.$attributedText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] attributedText in
+                self?.typingTextView.attributedText = attributedText
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$wpm
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] wpm in
+                self?.speedView.updateWpmLabel(wpm)
+            }
+            .store(in: &cancellables)
     }
 }
 
 extension TypingViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        viewModel.processInput(textView.text)
+        viewModel.processInput(textView.attributedText)
     }
 }

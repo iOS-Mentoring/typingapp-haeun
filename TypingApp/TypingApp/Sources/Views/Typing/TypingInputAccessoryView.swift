@@ -49,9 +49,11 @@ class TypingInputAccessoryView: UIView {
     
     private func setupUI() {
         backgroundColor = .gray200
-        layer.borderColor = .primaryEmphasis
-        layer.borderWidth = 1
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        let borderLayer = CALayer()
+        borderLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 1)
+        borderLayer.backgroundColor = .primaryEmphasis
+        layer.addSublayer(borderLayer)
         
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(authorLabel)

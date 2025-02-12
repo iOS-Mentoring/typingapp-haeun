@@ -114,6 +114,13 @@ class TypingViewController: BaseViewController {
                 self?.speedView.updateWpmLabel(wpm)
             }
             .store(in: &cancellables)
+        
+        viewModel.$isTypingEnabled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                self?.typingTextView.isEditable = isEnabled
+            }
+            .store(in: &cancellables)
     }
 }
 

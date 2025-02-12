@@ -13,6 +13,7 @@ class TypingViewModel {
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
     @Published private(set) var attributedText = NSAttributedString()
+    @Published private(set) var isTypingEnabled: Bool = true
     
     let placeholderText: String
     private var startTime: Date?
@@ -37,6 +38,8 @@ class TypingViewModel {
         for (index, inputWord) in inputWords.enumerated() {
             if index >= targetWords.count {
                 timer?.cancel()
+                isTypingEnabled = false
+                return
             }
             
             let targetWord = targetWords[index]

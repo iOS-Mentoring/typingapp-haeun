@@ -31,6 +31,41 @@ class CompletePopupViewController: BaseViewController {
     
     private let gradientView = UIView()
     
+    private let titleStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    private let title1Label: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "TimesNewRomanPS-ItalicMT", size: 50)
+        label.textColor = .black
+        label.attributedText = NSAttributedString(
+            string: "Good!",
+            attributes: [.kern: -0.05 * 50]
+        )
+        return label
+    }()
+    
+    private let title2Label: UILabel = {
+        let label = UILabel()
+        label.font = .pretendard(type: .medium, size: 16)
+        label.textColor = .black
+        label.attributedText = NSAttributedString(
+            string: "오늘 필사를 완료했어요",
+            attributes: [.kern: -0.03 * 16]
+        )
+        return label
+    }()
+    
+    private let haruImageView: UIImageView = {
+        let imageView = UIImageView(image: .illustHaruWhole)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,5 +101,11 @@ class CompletePopupViewController: BaseViewController {
         view.addSubview(backgroundImageView, autoLayout: [.topSafeArea(-224), .leadingSafeArea(-354), .height(1084), .width(1084)])
         view.addSubview(gradientView, autoLayout: [.topSafeArea(0), .leadingSafeArea(0), .trailingSafeArea(0), .height(74)])
         gradientView.layer.addSublayer(gradientLayer)
+        
+        titleStackView.addArrangedSubview(title1Label)
+        titleStackView.addArrangedSubview(title2Label)
+        view.addSubview(titleStackView, autoLayout: [.topSafeArea(70), .leading(20)])
+        
+        view.addSubview(haruImageView, autoLayout: [.topSafeArea(12), .trailingSafeArea(0), .leadingSafeArea(265), .aspectRatio(14.0/11.0)])
     }
 }

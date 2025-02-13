@@ -14,21 +14,13 @@ class TypingSpeedView: UIView {
         label.font = .pretendard(type: .light, size: 13)
         label.textColor = .white
         
-        let text = "WPM "
-        let number = "0"
-        
-        let attributedString = NSMutableAttributedString(string: text + number)
-        attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 13, weight: .bold), range: NSRange(location: text.count, length: number.count))
-        label.attributedText = attributedString
-        
         return label
     }()
     
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 13)
-        
-        label.text = "00:00:00"
+        label.textColor = .white
         
         return label
     }()
@@ -55,4 +47,16 @@ class TypingSpeedView: UIView {
         addSubview(timeLabel, autoLayout: [.trailing(20), .centerY(0)])
     }
     
+    func updateTimeLabel(_ text: String) {
+        timeLabel.text = text
+    }
+    
+    func updateWpmLabel(_ wpm: Int) {
+        let text = "WPM "
+        let number = "\(wpm)"
+        
+        let attributedString = NSMutableAttributedString(string: text + number)
+        attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 13, weight: .bold), range: NSRange(location: text.count, length: number.count))
+        wpmLabel.attributedText = attributedString
+    }
 }

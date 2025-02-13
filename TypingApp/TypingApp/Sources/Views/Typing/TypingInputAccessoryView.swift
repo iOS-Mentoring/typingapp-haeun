@@ -49,14 +49,20 @@ class TypingInputAccessoryView: UIView {
     
     private func setupUI() {
         backgroundColor = .gray200
-        layer.borderColor = .primaryEmphasis
-        layer.borderWidth = 1
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
+        let borderLayer = CALayer()
+        borderLayer.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 1)
+        borderLayer.backgroundColor = .primaryEmphasis
+        layer.addSublayer(borderLayer)
         
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(authorLabel)
         
         addSubview(stackView, autoLayout: [.leading(20), .centerY(0)])
         addSubview(linkButton, autoLayout: [.trailing(20), .centerY(0)])
+    }
+    
+    func setLinkButtonAction(_ action: Selector) {
+        linkButton.addTarget(self.superview?.next, action: action, for: .touchUpInside)
     }
 }

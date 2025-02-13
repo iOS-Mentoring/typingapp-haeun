@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class TypingViewController: BaseViewController {
     private let speedView = TypingSpeedView()
@@ -19,8 +20,6 @@ class TypingViewController: BaseViewController {
         textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 10, right: 16)
         
         textView.isEditable = false
-        
-        textView.text = "어른이 되는 것이 끔찍한 이유는 아무도 우리에게 관심이 없고, 앞으로는 스스로 모든 일을 처리하고 세상이 어떤 식으로 돌아가는지 파악해야 한다는 것을 깨닫는 순간이 찾아오기 때문이다."
         
         return textView
     }()
@@ -36,12 +35,25 @@ class TypingViewController: BaseViewController {
         
         return textView
     }()
+    
+    private let viewModel: TypingViewModel
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: TypingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
         setSpeedView()
         setTextView()
+        setupBindings()
     }
 
     private func setNavigationBar() {
@@ -74,6 +86,55 @@ class TypingViewController: BaseViewController {
             .bottomEqual(to: placeholderTextView, constant: 0)
         ])
         
+        placeholderTextView.text = viewModel.placeholderText
+        
         typingTextView.inputAccessoryView = typingInputAccessoryView
+        typingTextView.delegate = self
+        
+        typingInputAccessoryView.setLinkButtonAction(#selector(linkButtonTapped))
+    }
+    
+    @objc private func linkButtonTapped() {
+        let webViewModel = LinkWebViewViewModel(urlString: "https://google.com")
+        let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
+        linkWebViewController.modalPresentationStyle = .pageSheet
+        present(linkWebViewController, animated: true)
+    }
+    
+    private func setupBindings() {
+        viewModel.$elapsedTimeString
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] elapsedTimeString in
+                guard let self else { return }
+                self.speedView.updateTimeLabel(elapsedTimeString)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$attributedText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] attributedText in
+                self?.typingTextView.attributedText = attributedText
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$wpm
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] wpm in
+                self?.speedView.updateWpmLabel(wpm)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isTypingEnabled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEnabled in
+                self?.typingTextView.isEditable = isEnabled
+            }
+            .store(in: &cancellables)
+    }
+}
+
+extension TypingViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        viewModel.processInput(textView.attributedText)
     }
 }

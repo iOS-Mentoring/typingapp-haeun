@@ -13,7 +13,7 @@ class TypingViewModel {
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
     @Published private(set) var attributedText = NSAttributedString()
-    @Published private(set) var isTypingEnabled: Bool = true
+    @Published private(set) var isTypingEnded: Bool = false
     
     let placeholderText: String
     private var startTime: Date?
@@ -29,6 +29,13 @@ class TypingViewModel {
             startTimer()
         }
         
+        if inputText.string == placeholderText {
+            attributedText = createAttributedString(from: inputText, incorrectRanges: [])
+            timer?.cancel()
+            isTypingEnded = true
+            return
+        }
+        
         let inputWords = inputText.string.components(separatedBy: " ")
         let targetWords = placeholderText.components(separatedBy: " ")
         correctCharacterCount = 0
@@ -37,9 +44,9 @@ class TypingViewModel {
         var currentLocation = 0
         for (index, inputWord) in inputWords.enumerated() {
             if index >= targetWords.count {
-                timer?.cancel()
-                isTypingEnabled = false
-                return
+                let range = NSRange(location: currentLocation, length: inputWord.count)
+                incorrectRanges.append(range)
+                break
             }
             
             let targetWord = targetWords[index]

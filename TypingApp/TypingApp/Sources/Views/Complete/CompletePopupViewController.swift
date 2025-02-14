@@ -90,11 +90,34 @@ class CompletePopupViewController: BaseViewController {
         return button
     }()
     
+    @objc private func downloadButtonTapped() {
+        let captureFrame = CGRect(
+            x: typoView.frame.minX - 20,
+            y: typoView.frame.minY - 30,
+            width: UIScreen.width,
+            height: typoView.frame.height + 70
+        )
+        viewModel.captureAndSave(view: self.view, frame: captureFrame)
+    }
+    
+    private let viewModel: CompleteViewModel
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: CompleteViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigation()
         setupUI()
+        bindViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -137,5 +160,24 @@ class CompletePopupViewController: BaseViewController {
         view.addSubview(typoView, autoLayout: [.topSafeArea(320), .leading(20), .trailing(20)])
         
         view.addSubview(downloadButton, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(70)])
+        downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
+    }
+    
+    private func bindViewModel() {
+        viewModel.capturedImage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] image in
+                self?.showShareSheet(with: image)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func showShareSheet(with image: UIImage) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
+        
+        present(activityViewController, animated: true)
     }
 }

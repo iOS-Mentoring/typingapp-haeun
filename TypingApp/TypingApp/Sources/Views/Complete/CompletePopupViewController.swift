@@ -67,6 +67,7 @@ class CompletePopupViewController: BaseViewController {
     }()
     
     private let recordView = RecordView()
+    private let typoView = TypoView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,6 +111,8 @@ class CompletePopupViewController: BaseViewController {
         
         view.addSubview(haruImageView, autoLayout: [.topSafeArea(12), .trailingSafeArea(0), .leadingSafeArea(265), .aspectRatio(14.0/11.0)])
         
-        view.addSubview(recordView, autoLayout: [.topSafeArea(232), .leadingSafeArea(20), .trailingSafeArea(20), .height(88)])
+        view.addSubview(recordView, autoLayout: [.topSafeArea(192), .leadingSafeArea(20), .trailingSafeArea(20), .height(88)])
+        
+        view.addSubview(typoView, autoLayout: [.topSafeArea(320), .leading(20), .trailing(20)])
     }
 }

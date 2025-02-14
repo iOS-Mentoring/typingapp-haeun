@@ -69,6 +69,27 @@ class CompletePopupViewController: BaseViewController {
     private let recordView = RecordView()
     private let typoView = TypoView()
     
+    private let downloadButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.baseBackgroundColor = .primaryEmphasis
+        configuration.image = .iconInverseDownload
+        configuration.imagePlacement = .leading
+        configuration.imagePadding = 6
+        configuration.background.cornerRadius = 0
+        
+        let attributedString = NSAttributedString(
+            string: "이미지 저장하기",
+            attributes: [
+                .foregroundColor: UIColor.white,
+                .font: UIFont.pretendard(type: .semiBold, size: 16)
+            ]
+        )
+        configuration.attributedTitle = AttributedString(attributedString)
+        
+        let button = UIButton(configuration: configuration)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -114,5 +135,7 @@ class CompletePopupViewController: BaseViewController {
         view.addSubview(recordView, autoLayout: [.topSafeArea(192), .leadingSafeArea(20), .trailingSafeArea(20), .height(88)])
         
         view.addSubview(typoView, autoLayout: [.topSafeArea(320), .leading(20), .trailing(20)])
+        
+        view.addSubview(downloadButton, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(70)])
     }
 }

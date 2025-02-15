@@ -56,7 +56,7 @@ class TypingSpeedView: UIView {
         let number = "\(wpm)"
         
         let attributedString = NSMutableAttributedString(string: text + number)
-        attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 13, weight: .bold), range: NSRange(location: text.count, length: number.count))
+        attributedString.addAttribute(.font, value: UIFont.pretendard(type: .bold, size: 13), range: NSRange(location: text.count, length: number.count))
         wpmLabel.attributedText = attributedString
     }
 }

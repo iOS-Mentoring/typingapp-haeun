@@ -101,6 +101,8 @@ public extension UIView {
         case fillSafeAreaXLessThan(CGFloat = 0)
         case fillSafeAreaYLessThan(CGFloat = 0)
         case fillSafeAreaLessThan(CGFloat = 0)
+        
+        case aspectRatio(CGFloat = 1)
     }
     
     enum SizeLayout {
@@ -109,6 +111,8 @@ public extension UIView {
         
         case widthEqual(to: UIView, constant: CGFloat = 0)
         case heightEqual(to: UIView, constant: CGFloat = 0)
+        
+        case aspectRatio(CGFloat = 1)
     }
     
     enum BaseLayout {
@@ -554,6 +558,11 @@ public extension UIView {
                 let trailing = view.trailingAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -constant)
                 newConstraints[.trailing] = trailing
                 return [top, leading, bottom, trailing]
+                
+            case .aspectRatio(let ratio):
+                let height = view.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: ratio)
+                newConstraints[.height] = height
+                return [height]
             }
         }).flatMap { $0 }
         
@@ -568,6 +577,10 @@ public extension UIView {
         
         let layouts = layout.map({ layout in
             switch layout {
+            case .aspectRatio(let ratio):
+                let height = self.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: ratio)
+                newConstraints[.height] = height
+                return [height]
             case .width(let constant):
                 let width = self.widthAnchor.constraint(equalToConstant: constant)
                 newConstraints[.width] = width

@@ -124,10 +124,16 @@ class TypingViewController: BaseViewController {
             }
             .store(in: &cancellables)
         
-        viewModel.$isTypingEnabled
+        viewModel.$isTypingEnded
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] isEnabled in
-                self?.typingTextView.isEditable = isEnabled
+            .sink { [weak self] isTypingEnded in
+                if isTypingEnded {
+                    let completeVM = CompleteViewModel()
+                    let completeVC = CompletePopupViewController(viewModel: completeVM)
+                    let navVC = UINavigationController(rootViewController: completeVC)
+                    navVC.modalPresentationStyle = .overFullScreen
+                    self?.present(navVC, animated: true)
+                }
             }
             .store(in: &cancellables)
     }

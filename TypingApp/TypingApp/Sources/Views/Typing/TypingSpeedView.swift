@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TypingSpeedView: UIView {
+final class TypingSpeedView: UIView {
     
     private let wpmLabel: UILabel = {
         let label = UILabel()

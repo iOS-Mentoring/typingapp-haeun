@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class TypingViewController: BaseViewController {
+final class TypingViewController: BaseViewController {
     private let speedView = TypingSpeedView()
     private let typingInputAccessoryView = TypingInputAccessoryView()
     

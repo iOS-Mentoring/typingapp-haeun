@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TypingInputAccessoryView: UIView {
+final class TypingInputAccessoryView: UIView {
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()

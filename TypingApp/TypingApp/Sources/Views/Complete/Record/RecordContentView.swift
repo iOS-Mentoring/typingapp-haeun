@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecordContentView: UIView {
+final class RecordContentView: UIView {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical

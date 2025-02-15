@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CompletePopupViewController: BaseViewController {
+final class CompletePopupViewController: BaseViewController {
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .crumpledWhitePaper
@@ -117,7 +117,6 @@ class CompletePopupViewController: BaseViewController {
         
         setupNavigation()
         setupUI()
-        bindViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -161,15 +160,6 @@ class CompletePopupViewController: BaseViewController {
         
         view.addSubview(downloadButton, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(70)])
         downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
-    }
-    
-    private func bindViewModel() {
-        viewModel.capturedImage
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] image in
-                self?.showShareSheet(with: image)
-            }
-            .store(in: &cancellables)
     }
     
     private func showShareSheet(with image: UIImage) {

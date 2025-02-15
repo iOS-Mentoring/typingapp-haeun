@@ -97,7 +97,15 @@ final class CompletePopupViewController: BaseViewController {
             width: UIScreen.width,
             height: typoView.frame.height + 70
         )
-        viewModel.captureAndSave(view: self.view, frame: captureFrame)
+        
+        Task {
+            let capturedImage = await viewModel.captureImage(view: view, frame: captureFrame)
+            
+            await MainActor.run {
+                showShareSheet(with: capturedImage)
+            }
+        }
+        
     }
     
     private let viewModel: CompleteViewModel

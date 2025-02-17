@@ -12,7 +12,7 @@ final class TypingSpeedView: UIView {
     private let wpmLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .light, size: 13)
-        label.textColor = .white
+        label.textColor = .inversePrimaryEmphasis
         
         return label
     }()
@@ -20,7 +20,7 @@ final class TypingSpeedView: UIView {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 13)
-        label.textColor = .white
+        label.textColor = .inversePrimaryEmphasis
         
         return label
     }()
@@ -41,7 +41,7 @@ final class TypingSpeedView: UIView {
     }
     
     func setUpUI() {
-        backgroundColor = UIColor.primaryEmphasis
+        backgroundColor = UIColor(hexCode: "111111")
         //addSubview(gageView, autoLayout: [.leading(0), .top(0), .bottom(0), .width(80)])
         addSubview(wpmLabel, autoLayout: [.leading(20), .centerY(0)])
         addSubview(timeLabel, autoLayout: [.trailing(20), .centerY(0)])

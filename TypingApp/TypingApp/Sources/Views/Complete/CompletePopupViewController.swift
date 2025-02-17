@@ -41,7 +41,7 @@ final class CompletePopupViewController: BaseViewController {
     private let title1Label: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "TimesNewRomanPS-ItalicMT", size: 50)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.attributedText = NSAttributedString(
             string: "Good!",
             attributes: [.kern: -0.05 * 50]
@@ -52,7 +52,7 @@ final class CompletePopupViewController: BaseViewController {
     private let title2Label: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .medium, size: 16)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.attributedText = NSAttributedString(
             string: "오늘 필사를 완료했어요",
             attributes: [.kern: -0.03 * 16]
@@ -71,7 +71,7 @@ final class CompletePopupViewController: BaseViewController {
     
     private let downloadButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.baseBackgroundColor = .primaryEmphasis
+        configuration.baseBackgroundColor = UIColor(hexCode: "111111")
         configuration.image = .iconInverseDownload
         configuration.imagePlacement = .leading
         configuration.imagePadding = 6
@@ -80,7 +80,7 @@ final class CompletePopupViewController: BaseViewController {
         let attributedString = NSAttributedString(
             string: "이미지 저장하기",
             attributes: [
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.inversePrimaryEmphasis,
                 .font: UIFont.pretendard(type: .semiBold, size: 16)
             ]
         )
@@ -135,7 +135,7 @@ final class CompletePopupViewController: BaseViewController {
         navigationItem.rightBarButtonItem = closeButton
         
         let appearance = UINavigationBarAppearance()
-        appearance.shadowColor = .white
+        appearance.shadowColor = .inversePrimaryEmphasis
 
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance

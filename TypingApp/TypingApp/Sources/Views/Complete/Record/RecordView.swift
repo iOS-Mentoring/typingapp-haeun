@@ -19,7 +19,7 @@ final class RecordView: UIStackView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        addBorders(edges: [.top, .bottom], color: .black, width: 1)
+        addBorders(edges: [.top, .bottom], color: .primaryEmphasis, width: 1)
     }
     
     private func setupUI() {

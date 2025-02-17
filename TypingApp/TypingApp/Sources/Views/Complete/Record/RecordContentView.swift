@@ -18,7 +18,7 @@ final class RecordContentView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 11)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.textAlignment = .center
         return label
     }()
@@ -26,7 +26,7 @@ final class RecordContentView: UIView {
     private let contentLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .bold, size: 20)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.textAlignment = .center
         return label
     }()

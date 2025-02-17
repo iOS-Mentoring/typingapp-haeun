@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecordContentView: UIView {
+final class RecordContentView: UIView {
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -18,7 +18,7 @@ class RecordContentView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 11)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.textAlignment = .center
         return label
     }()
@@ -26,9 +26,15 @@ class RecordContentView: UIView {
     private let contentLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .bold, size: 20)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.textAlignment = .center
         return label
+    }()
+    
+    private let separateView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .primaryEmphasis
+        return view
     }()
     
     override init(frame: CGRect) {
@@ -36,9 +42,10 @@ class RecordContentView: UIView {
         setupUI()
     }
     
-    convenience init(titleText: String, contentText: String) {
+    convenience init(titleText: String, contentText: String, isLastItem: Bool = false) {
         self.init(frame: .zero)
         configure(titleText: titleText, contentText: contentText)
+        separateView.isHidden = isLastItem
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +56,8 @@ class RecordContentView: UIView {
         addSubview(stackView, autoLayout: [.top(0), .bottom(0), .leading(0), .trailing(0)])
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(contentLabel)
+        
+        addSubview(separateView, autoLayout: [.centerY(0), .height(35), .width(0.5), .trailing(0)])
     }
     
     private func configure(titleText: String, contentText: String) {

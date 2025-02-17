@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CompletePopupViewController: BaseViewController {
+final class CompletePopupViewController: BaseViewController {
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .crumpledWhitePaper
@@ -41,7 +41,7 @@ class CompletePopupViewController: BaseViewController {
     private let title1Label: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "TimesNewRomanPS-ItalicMT", size: 50)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.attributedText = NSAttributedString(
             string: "Good!",
             attributes: [.kern: -0.05 * 50]
@@ -52,7 +52,7 @@ class CompletePopupViewController: BaseViewController {
     private let title2Label: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .medium, size: 16)
-        label.textColor = .black
+        label.textColor = .primaryEmphasis
         label.attributedText = NSAttributedString(
             string: "오늘 필사를 완료했어요",
             attributes: [.kern: -0.03 * 16]
@@ -71,7 +71,7 @@ class CompletePopupViewController: BaseViewController {
     
     private let downloadButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.baseBackgroundColor = .primaryEmphasis
+        configuration.baseBackgroundColor = UIColor(hexCode: "111111")
         configuration.image = .iconInverseDownload
         configuration.imagePlacement = .leading
         configuration.imagePadding = 6
@@ -80,7 +80,7 @@ class CompletePopupViewController: BaseViewController {
         let attributedString = NSAttributedString(
             string: "이미지 저장하기",
             attributes: [
-                .foregroundColor: UIColor.white,
+                .foregroundColor: UIColor.inversePrimaryEmphasis,
                 .font: UIFont.pretendard(type: .semiBold, size: 16)
             ]
         )
@@ -97,7 +97,9 @@ class CompletePopupViewController: BaseViewController {
             width: UIScreen.width,
             height: typoView.frame.height + 70
         )
-        viewModel.captureAndSave(view: self.view, frame: captureFrame)
+        
+        let capturedImage = viewModel.captureImage(view: view, frame: captureFrame)
+        showShareSheet(with: capturedImage)
     }
     
     private let viewModel: CompleteViewModel
@@ -117,7 +119,6 @@ class CompletePopupViewController: BaseViewController {
         
         setupNavigation()
         setupUI()
-        bindViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,7 +135,7 @@ class CompletePopupViewController: BaseViewController {
         navigationItem.rightBarButtonItem = closeButton
         
         let appearance = UINavigationBarAppearance()
-        appearance.shadowColor = .white
+        appearance.shadowColor = .inversePrimaryEmphasis
 
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -161,15 +162,6 @@ class CompletePopupViewController: BaseViewController {
         
         view.addSubview(downloadButton, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(70)])
         downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
-    }
-    
-    private func bindViewModel() {
-        viewModel.capturedImage
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] image in
-                self?.showShareSheet(with: image)
-            }
-            .store(in: &cancellables)
     }
     
     private func showShareSheet(with image: UIImage) {

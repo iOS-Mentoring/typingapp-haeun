@@ -19,18 +19,17 @@ final class RecordView: UIStackView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        addBorders(edges: [.top, .bottom], color: .black, width: 1)
+        addBorders(edges: [.top, .bottom], color: .primaryEmphasis, width: 1)
     }
     
     private func setupUI() {
         axis = .horizontal
-        spacing = 8
         alignment = .center
         distribution = .fill
         
         let wpmRecordView = RecordContentView(titleText: "WPM", contentText: "0")
         let accRecordView = RecordContentView(titleText: "ACC", contentText: "0")
-        let dateRecordView = RecordContentView(titleText: "Date", contentText: "0")
+        let dateRecordView = RecordContentView(titleText: "Date", contentText: "0", isLastItem: true)
         
         let recordViews = [wpmRecordView, accRecordView, dateRecordView]
         recordViews.forEach { addArrangedSubview($0) }
@@ -39,7 +38,5 @@ final class RecordView: UIStackView {
                 view.autoLayout([.widthEqual(to: wpmRecordView, constant: 0)])
             }
         }
-        
-        addSeparators(color: .black, height: 35, width: 0.5)
     }
 }

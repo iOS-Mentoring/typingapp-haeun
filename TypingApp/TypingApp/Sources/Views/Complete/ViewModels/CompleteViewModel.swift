@@ -9,13 +9,10 @@ import UIKit
 import Combine
 
 final class CompleteViewModel {
-    let capturedImage = PassthroughSubject<UIImage, Never>()
-    
-    func captureAndSave(view: UIView, frame: CGRect) {
+    func captureImage(view: UIView, frame: CGRect) -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: frame)
-        let image = renderer.image { context in
+        return renderer.image { context in
             view.layer.render(in: context.cgContext)
         }
-        capturedImage.send(image)
     }
 }

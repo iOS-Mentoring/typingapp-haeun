@@ -31,14 +31,21 @@ final class RecordContentView: UIView {
         return label
     }()
     
+    private let separateView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .primaryEmphasis
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
     
-    convenience init(titleText: String, contentText: String) {
+    convenience init(titleText: String, contentText: String, isLastItem: Bool = false) {
         self.init(frame: .zero)
         configure(titleText: titleText, contentText: contentText)
+        separateView.isHidden = isLastItem
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +56,8 @@ final class RecordContentView: UIView {
         addSubview(stackView, autoLayout: [.top(0), .bottom(0), .leading(0), .trailing(0)])
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(contentLabel)
+        
+        addSubview(separateView, autoLayout: [.centerY(0), .height(35), .width(0.5), .trailing(0)])
     }
     
     private func configure(titleText: String, contentText: String) {

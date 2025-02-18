@@ -46,7 +46,11 @@ final class TypingViewModel {
             if index >= targetWords.count {
                 let range = NSRange(location: currentLocation, length: inputWord.count)
                 incorrectRanges.append(range)
-                break
+                currentLocation += inputWord.count
+                if index < inputWords.count - 1 {
+                    currentLocation += 1
+                }
+                continue
             }
             
             let targetWord = targetWords[index]

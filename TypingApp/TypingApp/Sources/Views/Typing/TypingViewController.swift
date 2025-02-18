@@ -38,9 +38,11 @@ final class TypingViewController: BaseViewController {
     
     private let viewModel: TypingViewModel
     private var cancellables = Set<AnyCancellable>()
+    private var scrollHandler: TextViewScrollHandler
     
     init(viewModel: TypingViewModel) {
         self.viewModel = viewModel
+        self.scrollHandler = TextViewScrollHandler(editableTextView: typingTextView, backgroundTextView: placeholderTextView)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,6 +56,7 @@ final class TypingViewController: BaseViewController {
         setSpeedView()
         setTextView()
         setupBindings()
+        cancellables.formUnion(scrollHandler.setupKeyboardObservers())
     }
 
     private func setNavigationBar() {
@@ -142,5 +145,12 @@ final class TypingViewController: BaseViewController {
 extension TypingViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         viewModel.processInput(textView.attributedText)
+        scrollHandler.scrollToVisible(textView: textView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == typingTextView {
+            scrollHandler.synchronizeScroll(from: typingTextView)
+        }
     }
 }

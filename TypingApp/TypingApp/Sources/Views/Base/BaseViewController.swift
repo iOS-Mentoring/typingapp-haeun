@@ -17,11 +17,11 @@ class BaseViewController: UIViewController {
     private func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .inversePrimaryEmphasis
         
         appearance.titleTextAttributes = [
             .font: UIFont.nanumMyeongjo(type: .bold, size: 22),
-            .foregroundColor: UIColor.primaryEmphasis
+            .foregroundColor: UIColor(hexCode: "111111") ?? UIColor.primaryEmphasis
         ]
         
         navigationController?.navigationBar.standardAppearance = appearance

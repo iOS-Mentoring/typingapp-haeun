@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import UIKit
 
-class TypingViewModel {
+final class TypingViewModel {
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
     @Published private(set) var attributedText = NSAttributedString()

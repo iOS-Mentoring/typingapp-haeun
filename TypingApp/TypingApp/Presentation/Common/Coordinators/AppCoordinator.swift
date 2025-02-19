@@ -10,7 +10,7 @@ import UIKit
 final class AppCoordinator: Coordinator {
     let navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    var parentCoordinator: Coordinator? = nil
+    weak var parentCoordinator: Coordinator? = nil
     
     private let window: UIWindow
     
@@ -21,6 +21,7 @@ final class AppCoordinator: Coordinator {
     
     func start() {
         let mainCoordinator = TypingCoordinator(navigationController: navigationController)
+        mainCoordinator.parentCoordinator = self
         childCoordinators.append(mainCoordinator)
         mainCoordinator.start()
         

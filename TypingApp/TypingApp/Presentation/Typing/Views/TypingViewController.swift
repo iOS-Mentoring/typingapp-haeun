@@ -98,10 +98,7 @@ final class TypingViewController: BaseViewController {
     }
     
     @objc private func linkButtonTapped() {
-        let webViewModel = LinkWebViewViewModel(urlString: "https://google.com")
-        let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
-        linkWebViewController.modalPresentationStyle = .pageSheet
-        present(linkWebViewController, animated: true)
+        viewModel.showLinkWebView()
     }
     
     private func setupBindings() {

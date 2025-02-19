@@ -129,7 +129,7 @@ final class TypingViewModel {
 }
 
 extension TypingViewModel {
-    func showLinkWebView(urlString: String) {
-        
+    func showLinkWebView() {
+        coordinator?.showLinkWebView()
     }
 }

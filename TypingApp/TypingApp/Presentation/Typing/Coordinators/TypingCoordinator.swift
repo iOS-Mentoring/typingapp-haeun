@@ -10,7 +10,7 @@ import UIKit
 final class TypingCoordinator: Coordinator {
     let navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    var parentCoordinator: Coordinator?
+    weak var parentCoordinator: Coordinator?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -21,5 +21,12 @@ final class TypingCoordinator: Coordinator {
         viewModel.coordinator = self
         let viewController = TypingViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func showLinkWebView() {
+        let linkWebViewCoordinator = LinkWebViewCoordinator(navigationController: navigationController)
+        addChildCoordinator(linkWebViewCoordinator)
+        linkWebViewCoordinator.parentCoordinator = self
+        linkWebViewCoordinator.start()
     }
 }

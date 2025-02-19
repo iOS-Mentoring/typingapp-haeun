@@ -15,7 +15,7 @@ protocol Coordinator: AnyObject {
     func start()
 }
 
-/*extension Coordinator {
+extension Coordinator {
     func finish() {
         childCoordinators.removeAll()
     }
@@ -28,4 +28,4 @@ protocol Coordinator: AnyObject {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }
 }
-*/
+

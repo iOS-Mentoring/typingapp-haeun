@@ -98,7 +98,7 @@ final class TypingViewController: BaseViewController {
     }
     
     @objc private func linkButtonTapped() {
-        viewModel.showLinkWebView()
+        viewModel.coordinator?.presentLinkWebView()
     }
     
     private func setupBindings() {

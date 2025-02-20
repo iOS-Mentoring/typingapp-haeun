@@ -23,10 +23,10 @@ final class TypingCoordinator: Coordinator {
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    func showLinkWebView() {
-        let linkWebViewCoordinator = LinkWebViewCoordinator(navigationController: navigationController)
-        addChildCoordinator(linkWebViewCoordinator)
-        linkWebViewCoordinator.parentCoordinator = self
-        linkWebViewCoordinator.start()
+    func presentLinkWebView() {
+        let webViewModel = LinkWebViewViewModel()
+        let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
+        linkWebViewController.modalPresentationStyle = .pageSheet
+        navigationController.present(linkWebViewController, animated: true)
     }
 }

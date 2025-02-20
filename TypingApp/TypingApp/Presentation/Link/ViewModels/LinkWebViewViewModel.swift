@@ -9,8 +9,6 @@ import Foundation
 import Combine
 
 final class LinkWebViewViewModel {
-    weak var coordinator: LinkWebViewCoordinator?
-    
     private let urlString: String
     private let urlRequestSubject = PassthroughSubject<URLRequest, Never>()
     

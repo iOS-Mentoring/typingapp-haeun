@@ -127,9 +127,3 @@ final class TypingViewModel {
         self.wpm = Int(wordsPerMinute)
     }
 }
-
-extension TypingViewModel {
-    func showLinkWebView() {
-        coordinator?.showLinkWebView()
-    }
-}

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class LinkWebViewViewModel {
+final class LinkWebViewViewModel {
     private let urlString: String
     private let urlRequestSubject = PassthroughSubject<URLRequest, Never>()
     
@@ -16,8 +16,8 @@ class LinkWebViewViewModel {
         urlRequestSubject.eraseToAnyPublisher()
     }
     
-    init(urlString: String) {
-        self.urlString = urlString
+    init() {
+        self.urlString = "https://google.com"
     }
     
     func loadWebPage() {

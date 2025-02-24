@@ -11,38 +11,13 @@ import Combine
 final class TypingViewController: BaseViewController {
     private let speedView = TypingSpeedView()
     private let typingInputAccessoryView = TypingInputAccessoryView()
-    
-    private let placeholderTextView: UITextView = {
-        let textView = UITextView()
-        textView.textColor = .gray300
-        textView.backgroundColor = .gray200
-        textView.font = .pretendard(type: .regular, size: 20)
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 10, right: 16)
-        
-        textView.isEditable = false
-        
-        return textView
-    }()
-    
-    private let typingTextView: UITextView = {
-        let textView = UITextView()
-        textView.textColor = .gray300
-        textView.backgroundColor = .clear
-        textView.font = .pretendard(type: .regular, size: 20)
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 10, right: 16)
-        
-        textView.becomeFirstResponder()
-        
-        return textView
-    }()
+    private let layeredTextView = LayeredTextView()
     
     private let viewModel: TypingViewModel
     private var cancellables = Set<AnyCancellable>()
-    private var scrollHandler: TextViewScrollHandler
     
     init(viewModel: TypingViewModel) {
         self.viewModel = viewModel
-        self.scrollHandler = TextViewScrollHandler(editableTextView: typingTextView, backgroundTextView: placeholderTextView)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,7 +31,6 @@ final class TypingViewController: BaseViewController {
         setSpeedView()
         setTextView()
         setupBindings()
-        cancellables.formUnion(scrollHandler.setupKeyboardObservers())
     }
 
     private func setNavigationBar() {
@@ -81,27 +55,14 @@ final class TypingViewController: BaseViewController {
     }
     
     private func setTextView() {
-        view.addSubview(placeholderTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
-        view.addSubview(typingTextView, autoLayout: [
-            .topEqual(to: placeholderTextView, constant: 0),
-            .leadingEqual(to: placeholderTextView, constant: 0),
-            .trailingEqual(to: placeholderTextView, constant: 0),
-            .bottomEqual(to: placeholderTextView, constant: 0)
-        ])
-        
-        placeholderTextView.text = viewModel.placeholderText
-        
-        typingTextView.inputAccessoryView = typingInputAccessoryView
-        typingTextView.delegate = self
+        layeredTextView.configure(with: viewModel, placeholderText: viewModel.placeholderText, inputAccessoryView: typingInputAccessoryView)
+        view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
         
         typingInputAccessoryView.setLinkButtonAction(#selector(linkButtonTapped))
     }
     
     @objc private func linkButtonTapped() {
-        let webViewModel = LinkWebViewViewModel(urlString: "https://google.com")
-        let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
-        linkWebViewController.modalPresentationStyle = .pageSheet
-        present(linkWebViewController, animated: true)
+        viewModel.coordinator?.presentLinkWebView()
     }
     
     private func setupBindings() {
@@ -110,13 +71,6 @@ final class TypingViewController: BaseViewController {
             .sink { [weak self] elapsedTimeString in
                 guard let self else { return }
                 self.speedView.updateTimeLabel(elapsedTimeString)
-            }
-            .store(in: &cancellables)
-        
-        viewModel.$attributedText
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] attributedText in
-                self?.typingTextView.attributedText = attributedText
             }
             .store(in: &cancellables)
         
@@ -139,18 +93,5 @@ final class TypingViewController: BaseViewController {
                 }
             }
             .store(in: &cancellables)
-    }
-}
-
-extension TypingViewController: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
-        viewModel.processInput(textView.attributedText)
-        scrollHandler.scrollToVisible(textView: textView)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == typingTextView {
-            scrollHandler.synchronizeScroll(from: typingTextView)
-        }
     }
 }

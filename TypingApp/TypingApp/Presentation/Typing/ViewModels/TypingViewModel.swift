@@ -22,6 +22,54 @@ final class TypingViewModel {
     private var correctCharacterCount = 0
     private var timer: AnyCancellable?
     
+    private func createAttributedString(from text: NSAttributedString, incorrectRanges: [NSRange]) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(attributedString: text)
+        
+        // 기본 색상으로 설정
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor.primaryEmphasis,
+            range: NSRange(location: 0, length: text.string.count)
+        )
+        
+        // 틀린 부분 빨간색으로 설정
+        for range in incorrectRanges {
+            attributedString.addAttribute(
+                .foregroundColor,
+                value: UIColor.primaryRed,
+                range: range
+            )
+        }
+        
+        return attributedString
+    }
+    
+    private func startTimer() {
+        startTime = Date()
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self,
+                      let startTime = self.startTime else { return }
+                self.updateWpm(from: startTime)
+            }
+    }
+    
+    private func updateWpm(from startTime: Date) {
+        let timeElapsed = Date().timeIntervalSince(startTime)
+        
+        let hours = Int(timeElapsed) / 3600
+        let minutes = Int(timeElapsed) / 60 % 60
+        let seconds = Int(timeElapsed) % 60
+        
+        self.elapsedTimeString = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        
+        let wordsPerMinute = Double(correctCharacterCount) / timeElapsed * 60
+        self.wpm = Int(wordsPerMinute)
+    }
+}
+
+extension TypingViewModel: TextProcessing {
     func processInput(_ inputText: NSAttributedString) {
         if startTime == nil {
             startTimer()
@@ -81,49 +129,7 @@ final class TypingViewModel {
         
     }
     
-    private func createAttributedString(from text: NSAttributedString, incorrectRanges: [NSRange]) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(attributedString: text)
-        
-        // 기본 색상으로 설정
-        attributedString.addAttribute(
-            .foregroundColor,
-            value: UIColor.primaryEmphasis,
-            range: NSRange(location: 0, length: text.string.count)
-        )
-        
-        // 틀린 부분 빨간색으로 설정
-        for range in incorrectRanges {
-            attributedString.addAttribute(
-                .foregroundColor,
-                value: UIColor.primaryRed,
-                range: range
-            )
-        }
-        
-        return attributedString
-    }
-    
-    private func startTimer() {
-        startTime = Date()
-        timer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self,
-                      let startTime = self.startTime else { return }
-                self.updateWpm(from: startTime)
-            }
-    }
-    
-    private func updateWpm(from startTime: Date) {
-        let timeElapsed = Date().timeIntervalSince(startTime)
-        
-        let hours = Int(timeElapsed) / 3600
-        let minutes = Int(timeElapsed) / 60 % 60
-        let seconds = Int(timeElapsed) % 60
-        
-        self.elapsedTimeString = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
-        
-        let wordsPerMinute = Double(correctCharacterCount) / timeElapsed * 60
-        self.wpm = Int(wordsPerMinute)
+    var attributedTextPublisher: AnyPublisher<NSAttributedString, Never> {
+        $attributedText.eraseToAnyPublisher()
     }
 }

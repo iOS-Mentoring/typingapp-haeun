@@ -18,6 +18,7 @@ class BaseViewController: UIViewController {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .inversePrimaryEmphasis
+        appearance.shadowColor = .inversePrimaryEmphasis
         
         appearance.titleTextAttributes = [
             .font: UIFont.nanumMyeongjo(type: .bold, size: 22),

@@ -42,14 +42,21 @@ final class DayCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        addSubview(selectionIndicator, autoLayout: [.top(0), .leading(0), .trailing(0), .aspectRatio(1)])
+        addSubview(selectionIndicator, autoLayout: [.top(0), .height(30), .width(30), .centerX(0)])
         selectionIndicator.addSubview(dayLabel, autoLayout: [.center(0)])
-        addSubview(typingIndicator, autoLayout: [.centerY(0), .topNext(to: selectionIndicator, constant: 5), .width(4), .height(4)])
+        addSubview(typingIndicator, autoLayout: [.centerX(0), .topNext(to: selectionIndicator, constant: 5), .width(4), .height(4)])
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         selectionIndicator.backgroundColor = .clear
         typingIndicator.isHidden = true
+    }
+    
+    //func configure(with day: CalendarDay) {
+    func configure() {
+        dayLabel.text = "10"
+        
+        //selectionIndicator.isHidden = !day.isSelected
     }
 }

@@ -133,12 +133,6 @@ final class CompletePopupViewController: BaseViewController {
             action: #selector(closeButtonTapped)
         )
         navigationItem.rightBarButtonItem = closeButton
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.shadowColor = .inversePrimaryEmphasis
-
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     @objc private func closeButtonTapped() {

@@ -14,7 +14,7 @@ class HistoryViewController: BaseViewController {
     }
     
     private func setNavigation() {
-        title = "하루필사"
+        title = "하루 보관함"
         setupBackButton()
     }
 }

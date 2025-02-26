@@ -142,7 +142,8 @@ extension CalendarView: UICollectionViewDataSource {
         
         let day = viewModel.days[indexPath.item]
         let isSelected = viewModel.selectedIndex() == indexPath.item
-        cell.configure(with: day, isSelected: isSelected)
+        
+        cell.configure(with: day, selected: isSelected)
         
         return cell
     }

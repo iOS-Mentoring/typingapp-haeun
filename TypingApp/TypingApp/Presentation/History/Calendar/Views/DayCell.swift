@@ -53,10 +53,14 @@ final class DayCell: UICollectionViewCell {
         typingIndicator.isHidden = true
     }
     
-    //func configure(with day: CalendarDay) {
-    func configure() {
-        dayLabel.text = "10"
+    func configure(with day: DayModel, isSelected: Bool) {
+        dayLabel.text = day.dateString
         
-        //selectionIndicator.isHidden = !day.isSelected
+        setSelected(isSelected)
+        typingIndicator.isHidden = !day.hasTypingResult
+    }
+    
+    func setSelected(_ selected: Bool) {
+        selectionIndicator.backgroundColor = isSelected ? .gray100 : .clear
     }
 }

@@ -53,6 +53,7 @@ final class HistoryViewController: BaseViewController {
         super.viewDidLoad()
         setNavigation()
         setupUI()
+        calendarView.delegate = self
     }
     
     private func setNavigation() {
@@ -72,5 +73,11 @@ final class HistoryViewController: BaseViewController {
         shareButton.autoLayout([.width(36), .height(36)])
         
         view.addSubview(haruImageView, autoLayout: [.trailing(0), .bottom(40), .width(110), .height(140)])
+    }
+}
+
+extension HistoryViewController: CalendarViewDelegate {
+    func calendarView(_ calendarView: CalendarView, didSelectDay day: DayModel) {
+        historyContentView.configure(with: day)
     }
 }

@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+protocol CalendarViewDelegate: AnyObject {
+    func calendarView(_ calendarView: CalendarView, didSelectDay day: DayModel)
+}
+
 final class CalendarView: UIView {
     private let weekdayHeaderView: UIStackView = {
         let stackView = UIStackView()
@@ -26,6 +30,7 @@ final class CalendarView: UIView {
     
     private let viewModel = CalendarViewModel()
     private var cancellables = Set<AnyCancellable>()
+    weak var delegate: CalendarViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,9 +102,9 @@ final class CalendarView: UIView {
         viewModel.selectedDayPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] day in
-                guard let self = self, day != nil else { return }
+                guard let self = self, let day = day else { return }
                 self.updateSelectedCell()
-                //self.delegate?.calendarView(self, didSelectDay: day)
+                self.delegate?.calendarView(self, didSelectDay: day)
             }
             .store(in: &cancellables)
     }

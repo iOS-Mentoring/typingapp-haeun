@@ -26,7 +26,7 @@ final class RecordView: UIStackView {
         axis = .horizontal
         alignment = .center
         distribution = .fill
-        
+        autoLayout([.height(88)])
         let wpmRecordView = RecordContentView(titleText: "WPM", contentText: "0")
         let accRecordView = RecordContentView(titleText: "ACC", contentText: "0")
         let dateRecordView = RecordContentView(titleText: "Date", contentText: "0", isLastItem: true)

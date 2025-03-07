@@ -36,6 +36,10 @@ final class CalendarViewModel {
         return daysSubject.value
     }
     
+    var selectedDay: DayModel? {
+        return selectedDaySubject.value
+    }
+    
     init() {
         setupCalendarData()
         selectToday()

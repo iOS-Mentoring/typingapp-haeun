@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class HistoryViewController: BaseViewController {
-    private let calendarView = CalendarView()
+    private let calendarViewModel = CalendarViewModel()
+    private lazy var calendarView = CalendarView(viewModel: calendarViewModel)
     private let historyContentView = HistoryContentView()
     
     private let bottomView: UIView = {
@@ -49,11 +51,12 @@ final class HistoryViewController: BaseViewController {
         return imageView
     }()
     
+    private var cancellables = Set<AnyCancellable>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigation()
         setupUI()
-        calendarView.delegate = self
     }
     
     private func setNavigation() {
@@ -74,10 +77,14 @@ final class HistoryViewController: BaseViewController {
         
         view.addSubview(haruImageView, autoLayout: [.trailing(0), .bottom(40), .width(110), .height(140)])
     }
-}
-
-extension HistoryViewController: CalendarViewDelegate {
-    func calendarView(_ calendarView: CalendarView, didSelectDay day: DayModel) {
-        historyContentView.configure(with: day)
+    
+    private func setupBindings() {
+        calendarViewModel.selectedDayPublisher
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] day in
+                self?.historyContentView.configure(with: day)
+            }
+            .store(in: &cancellables)
     }
 }

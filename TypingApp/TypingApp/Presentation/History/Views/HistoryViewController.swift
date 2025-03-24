@@ -57,6 +57,7 @@ final class HistoryViewController: BaseViewController {
         super.viewDidLoad()
         setNavigation()
         setupUI()
+        setupBindings()
     }
     
     private func setNavigation() {

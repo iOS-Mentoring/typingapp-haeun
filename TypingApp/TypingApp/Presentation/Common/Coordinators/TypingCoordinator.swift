@@ -53,7 +53,7 @@ extension TypingCoordinator: UINavigationControllerDelegate {
         
         if navigationController.viewControllers.contains(fromViewController) { return }
         
-        if let vc = fromViewController as? HistoryViewController {
+        if let _ = fromViewController as? HistoryViewController {
             //removeChildCoordinator()
             print("remove historycoordinator")
         }

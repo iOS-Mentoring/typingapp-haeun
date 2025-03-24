@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-public extension UIView {
+/*public extension UIView {
     var tapPublisher: AnyPublisher<Void, Never> {
         let tapGesture = UITapGestureRecognizer()
         self.addGestureRecognizer(tapGesture)
@@ -59,3 +59,4 @@ extension Publishers {
         }
     }
 }
+*/

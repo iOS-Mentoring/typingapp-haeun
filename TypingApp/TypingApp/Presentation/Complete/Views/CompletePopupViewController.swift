@@ -98,7 +98,7 @@ final class CompletePopupViewController: BaseViewController {
             height: typoView.frame.height + 70
         )
         
-        let capturedImage = viewModel.captureImage(view: view, frame: captureFrame)
+        let capturedImage = view.captureImage(frame: captureFrame)
         showShareSheet(with: capturedImage)
     }
     

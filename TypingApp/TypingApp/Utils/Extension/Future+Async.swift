@@ -5,7 +5,7 @@
 //  Created by wi_seong on 12/17/24.
 //
 
-import Combine
+/*import Combine
 
 public extension Future where Failure == Never {
     convenience init(asyncFunc: @escaping () async throws -> Output) {
@@ -21,3 +21,4 @@ public extension Future where Failure == Never {
         }
     }
 }
+*/

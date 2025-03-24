@@ -8,6 +8,7 @@
 import Combine
 import UIKit
 
+/*
 extension UIControl {
     public func controlPublisher(for event: UIControl.Event) -> UIControl.EventPublisher {
         return UIControl.EventPublisher(control: self, event: event)
@@ -57,3 +58,4 @@ extension UIControl {
         }
     }
 }
+*/

@@ -5,7 +5,7 @@
 //  Created by wi_seong on 12/27/24.
 //
 
-import UIKit
+/*import UIKit
 import Combine
 
 public protocol CombineKeyboardType {
@@ -153,3 +153,4 @@ extension CombineKeyboard: UIGestureRecognizerDelegate {
         gestureRecognizer === self.panRecognizer
     }
 }
+*/

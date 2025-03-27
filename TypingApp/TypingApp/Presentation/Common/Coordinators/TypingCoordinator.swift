@@ -27,7 +27,7 @@ final class TypingCoordinator: NSObject, Coordinator {
         let webViewModel = LinkWebViewViewModel()
         let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
         linkWebViewController.modalPresentationStyle = .pageSheet
-        //navigationController.present(linkWebViewController, animated: true)
+        router.present(viewController: linkWebViewController, animated: true, completion: nil)
     }
     
     func presentCompleteView() {
@@ -35,7 +35,7 @@ final class TypingCoordinator: NSObject, Coordinator {
         let viewController = CompletePopupViewController(viewModel: viewModel)
         let navVC = UINavigationController(rootViewController: viewController)
         navVC.modalPresentationStyle = .overFullScreen
-        //navigationController.present(navVC, animated: true)
+        router.present(viewController: navVC, animated: true, completion: nil)
     }
     
     func showHistoryView() {

@@ -58,8 +58,8 @@ extension Router {
             .foregroundColor: UIColor(hexCode: "111111") ?? UIColor.primaryEmphasis
         ]
         
-        navigationController.navigationBar.standardAppearance = appearance
-        navigationController.navigationBar.scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     
     private func setupBackButton(to viewController: UIViewController) {

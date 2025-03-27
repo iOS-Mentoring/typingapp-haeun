@@ -36,17 +36,14 @@ final class TypingViewController: UIViewController {
     private func setNavigationBar() {
         title = "하루필사"
         
+        let action = UIAction { _ in
+            self.viewModel.coordinator?.showHistoryView()
+        }
         let historyButton = UIBarButtonItem(
             image: .iconHistory,
-            style: .plain,
-            target: self,
-            action: #selector(historyButtonTapped)
+            primaryAction: action
         )
         navigationItem.rightBarButtonItem = historyButton
-    }
-    
-    @objc private func historyButtonTapped() {
-        viewModel.coordinator?.showHistoryView()
     }
     
     private func setSpeedView() {
@@ -57,11 +54,10 @@ final class TypingViewController: UIViewController {
         layeredTextView.configure(with: viewModel, placeholderText: viewModel.placeholderText, inputAccessoryView: typingInputAccessoryView)
         view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
         
-        typingInputAccessoryView.setLinkButtonAction(#selector(linkButtonTapped))
-    }
-    
-    @objc private func linkButtonTapped() {
-        viewModel.coordinator?.presentLinkWebView()
+        let action = UIAction { _ in
+            self.viewModel.coordinator?.presentLinkWebView()
+        }
+        typingInputAccessoryView.setLinkButtonAction(action)
     }
     
     private func setupBindings() {

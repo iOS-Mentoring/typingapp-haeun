@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class CompletePopupViewController: BaseViewController {
+final class CompletePopupViewController: UIViewController {
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .crumpledWhitePaper

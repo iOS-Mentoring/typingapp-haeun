@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class TypingViewController: BaseViewController {
+final class TypingViewController: UIViewController {
     private let speedView = TypingSpeedView()
     private let typingInputAccessoryView = TypingInputAccessoryView()
     private let layeredTextView = LayeredTextView()
@@ -32,7 +32,7 @@ final class TypingViewController: BaseViewController {
         setTextView()
         setupBindings()
     }
-
+    
     private func setNavigationBar() {
         title = "하루필사"
         
@@ -46,8 +46,7 @@ final class TypingViewController: BaseViewController {
     }
     
     @objc private func historyButtonTapped() {
-        let historyViewController = HistoryViewController()
-        navigationController?.pushViewController(historyViewController, animated: true)
+        viewModel.coordinator?.showHistoryView()
     }
     
     private func setSpeedView() {

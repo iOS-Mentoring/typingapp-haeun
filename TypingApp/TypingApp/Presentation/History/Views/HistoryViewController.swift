@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class HistoryViewController: BaseViewController {
+final class HistoryViewController: UIViewController {
     private let calendarViewModel = CalendarViewModel()
     private lazy var calendarView = CalendarView(viewModel: calendarViewModel)
     private let historyContentView = HistoryContentView()
@@ -55,17 +55,12 @@ final class HistoryViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigation()
         setupUI()
         setupBindings()
     }
     
-    private func setNavigation() {
-        title = "하루 보관함"
-        setupBackButton()
-    }
-    
     private func setupUI() {
+        title = "하루 보관함"
         view.addSubview(calendarView, autoLayout: [.topSafeArea(0), .leading(0), .trailing(0), .height(95)])
         view.addSubview(historyContentView, autoLayout: [.topNext(to: calendarView, constant: 20), .leading(20), .trailing(20), .bottom(0)])
         

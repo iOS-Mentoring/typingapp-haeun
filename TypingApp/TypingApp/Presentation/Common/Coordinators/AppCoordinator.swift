@@ -8,24 +8,25 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-    let navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    weak var parentCoordinator: Coordinator? = nil
+    var router: Router
     
     private let window: UIWindow
     
     init(window: UIWindow) {
         self.window = window
-        self.navigationController = UINavigationController()
+        
+        let navigationController = UINavigationController()
+        navigationController.view.backgroundColor = .gray200
+        window.rootViewController = navigationController
+        
+        self.router = Router(navigationController: navigationController)
     }
     
     func start() {
-        let mainCoordinator = TypingCoordinator(navigationController: navigationController)
-        mainCoordinator.parentCoordinator = self
+        let mainCoordinator = TypingCoordinator(router: router)
         childCoordinators.append(mainCoordinator)
         mainCoordinator.start()
-        
-        window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
 }

@@ -41,8 +41,6 @@ final class TimerUseCaseImpl: TimerUseCase {
     }
     
     private func startTimer() {
-        guard timer == nil else { return }
-        
         startTime = Date()
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
@@ -54,13 +52,12 @@ final class TimerUseCaseImpl: TimerUseCase {
                 
                 self.stateSubject.send(
                     TimerState(elapsedTimeString: timeString, elapsedTime: elapsed)
-                    )
+                )
             }
     }
     
     func stopTimer() {
         timer?.cancel()
-        timer = nil
     }
     
     private func formatTimeInterval(_ timeElapsed: TimeInterval) -> String {

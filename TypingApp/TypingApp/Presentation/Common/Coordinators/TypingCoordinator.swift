@@ -16,7 +16,7 @@ final class TypingCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let viewModel = TypingViewModel()
+        let viewModel = TypingViewModel(timerUseCase: TimerUseCaseImpl(), textProcessingUseCase: TextProcessingUseCaseImpl())
         viewModel.coordinator = self
         let viewController = TypingViewController(viewModel: viewModel)
         

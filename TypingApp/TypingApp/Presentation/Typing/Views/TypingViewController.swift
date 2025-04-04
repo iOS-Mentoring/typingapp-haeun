@@ -51,7 +51,7 @@ final class TypingViewController: UIViewController {
     }
     
     private func setTextView() {
-        layeredTextView.configure(with: viewModel, placeholderText: viewModel.placeholderText, inputAccessoryView: typingInputAccessoryView)
+        layeredTextView.configure(with: viewModel, inputAccessoryView: typingInputAccessoryView)
         view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
         
         let action = UIAction { _ in
@@ -61,6 +61,14 @@ final class TypingViewController: UIViewController {
     }
     
     private func setupBindings() {
+        viewModel.$placeholderText
+            .receive(on: RunLoop.main)
+            .sink { [weak self] text in
+                guard let self = self else { return }
+                self.layeredTextView.setPlaceholderText(text)
+            }
+            .store(in: &cancellables)
+        
         viewModel.$elapsedTimeString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] elapsedTimeString in

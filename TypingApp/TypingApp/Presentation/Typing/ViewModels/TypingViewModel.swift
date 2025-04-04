@@ -12,22 +12,34 @@ import UIKit
 final class TypingViewModel {
     weak var coordinator: TypingCoordinator?
     
+    @Published private(set) var placeholderText: String = ""
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
     @Published private(set) var attributedText = NSAttributedString()
     @Published private(set) var isTypingEnded: Bool = false
     
-    let placeholderText = "어른이 되는 것이 끔찍한 이유는 아무도 우리에게 관심이 없고, 앞으로는 스스로 모든 일을 처리하고 세상이 어떤 식으로 돌아가는지 파악해야 한다는 것을 깨닫는 순간이 찾아오기 때문이다."
     private var currentElapsedTime: TimeInterval?
     private var correctCharacterCount = 0
     private var cancellables = Set<AnyCancellable>()
     
     private let timerUseCase: TimerUseCase
     private let textProcessingUseCase: TextProcessingUseCase
+    private let fetchTypingTextUseCase: FetchTypngTextUseCase
     
-    init(timerUseCase: TimerUseCase, textProcessingUseCase: TextProcessingUseCase) {
+    init(timerUseCase: TimerUseCase, textProcessingUseCase: TextProcessingUseCase, fetchTypingTextUseCase: FetchTypngTextUseCase) {
         self.timerUseCase = timerUseCase
         self.textProcessingUseCase = textProcessingUseCase
+        self.fetchTypingTextUseCase = fetchTypingTextUseCase
+        loadPlaceholderText()
+    }
+    
+    private func loadPlaceholderText() {
+        fetchTypingTextUseCase.execute()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] text in
+                self?.placeholderText = text
+            })
+            .store(in: &cancellables)
     }
     
     private func startTyping() {

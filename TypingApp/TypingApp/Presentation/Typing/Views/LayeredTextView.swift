@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol TextProcessing {
-    func processInput(_ inputText: NSAttributedString)
+    func processInput(_ inputText: String)
     var attributedTextPublisher: AnyPublisher<NSAttributedString, Never> { get }
 }
 
@@ -132,7 +132,7 @@ extension LayeredTextView {
 
 extension LayeredTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        processor?.processInput(textView.attributedText)
+        processor?.processInput(textView.text)
         scrollToVisible(textView: textView)
     }
     

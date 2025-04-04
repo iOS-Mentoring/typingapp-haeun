@@ -47,13 +47,13 @@ final class TypingViewModel {
         self.wpm = Int(wordsPerMinute)
     }
     
-    private func createAttributedString(from text: NSAttributedString, incorrectRanges: [NSRange]) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(attributedString: text)
+    private func createAttributedString(from text: String, incorrectRanges: [NSRange]) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: text)
         
         attributedString.addAttribute(
             .foregroundColor,
             value: UIColor.primaryEmphasis,
-            range: NSRange(location: 0, length: text.string.count)
+            range: NSRange(location: 0, length: text.count)
         )
         
         for range in incorrectRanges {
@@ -69,7 +69,7 @@ final class TypingViewModel {
 }
 
 extension TypingViewModel: TextProcessing {
-    func processInput(_ inputText: NSAttributedString) {
+    func processInput(_ inputText: String) {
         if cancellables.isEmpty {
             startTyping()
         }
@@ -83,7 +83,6 @@ extension TypingViewModel: TextProcessing {
             timerUseCase.execute(.stop)
                 .sink { _ in }
                 .store(in: &cancellables)
-            
         }
         
         updateWpm()

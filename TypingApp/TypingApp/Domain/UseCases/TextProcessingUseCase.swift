@@ -8,12 +8,12 @@
 import Foundation
 
 protocol TextProcessingUseCase {
-    func execute(inputText: NSAttributedString, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool)
+    func execute(inputText: String, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool)
 }
 
 final class TextProcessingUseCaseImpl: TextProcessingUseCase {
-    func execute(inputText: NSAttributedString, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool) {
-        let inputWords = inputText.string.components(separatedBy: " ")
+    func execute(inputText: String, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool) {
+        let inputWords = inputText.components(separatedBy: " ")
         let targetWords = placeholderText.components(separatedBy: " ")
         var incorrectRanges: [NSRange] = []
         var correctCharacterCount = 0
@@ -28,7 +28,7 @@ final class TextProcessingUseCaseImpl: TextProcessingUseCase {
             currentLocation += inputWord.count + 1
         }
         
-        let isTypingEnded = inputText.string == placeholderText
+        let isTypingEnded = inputText == placeholderText
         return (incorrectRanges, correctCharacterCount, isTypingEnded)
     }
 }

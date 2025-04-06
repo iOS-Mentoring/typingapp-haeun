@@ -7,12 +7,14 @@
 
 import UIKit
 
+enum PresentationStyle {
+    case push
+    case present
+}
+
 @MainActor
 protocol RouterProtocol: AnyObject {
-    func push(viewController: UIViewController, animated: Bool, backButton: Bool)
-    func pop(animated: Bool)
-    func popToRoot(animated: Bool)
-    func present(viewController: UIViewController, animated: Bool, completion: (() -> Void)?)
+    func show(_ viewController: UIViewController, style: PresentationStyle)
     func dismiss(animated: Bool, completion: (() -> Void)?)
 }
 
@@ -24,25 +26,24 @@ final class Router: RouterProtocol {
         setupNavigationBar()
     }
     
-    func push(viewController: UIViewController, animated: Bool, backButton: Bool = true) {
-        backButton ? setupBackButton(to: viewController) : ()
-        navigationController.pushViewController(viewController, animated: animated)
+    func show(_ viewController: UIViewController, style: PresentationStyle) {
+        switch style {
+        case .push:
+            if !navigationController.viewControllers.isEmpty {
+                setupBackButton(to: viewController)
+            }
+            navigationController.pushViewController(viewController, animated: true)
+        case .present:
+            navigationController.present(viewController, animated: true)
+        }
     }
     
-    func pop(animated: Bool) {
-        navigationController.popViewController(animated: animated)
-    }
-    
-    func popToRoot(animated: Bool) {
-        navigationController.popToRootViewController(animated: animated)
-    }
-    
-    func present(viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
-        navigationController.present(viewController, animated: animated, completion: completion)
-    }
-    
-    func dismiss(animated: Bool, completion: (() -> Void)?) {
-        navigationController.dismiss(animated: animated, completion: completion)
+    func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
+        if navigationController.presentedViewController != nil {
+            navigationController.dismiss(animated: animated, completion: completion)
+        } else {
+            navigationController.popViewController(animated: animated)
+        }
     }
 }
 
@@ -64,7 +65,7 @@ extension Router {
     
     private func setupBackButton(to viewController: UIViewController) {
         let action = UIAction { _ in
-            self.pop(animated: true)
+            self.dismiss(animated: true)
         }
         let closeButton = UIBarButtonItem(image: .iconLeftArrow, primaryAction: action)
         viewController.navigationItem.leftBarButtonItem = closeButton

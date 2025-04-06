@@ -19,6 +19,6 @@ final class HistoryCoordinator: Coordinator {
         //let viewModel = HistoryViewModel()
         //viewModel.coordinator = self
         let viewController = HistoryViewController()
-        router.push(viewController: viewController, animated: true)
+        router.show(viewController, style: .push)
     }
 }

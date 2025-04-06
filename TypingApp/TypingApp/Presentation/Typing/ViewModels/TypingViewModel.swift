@@ -12,7 +12,7 @@ import UIKit
 final class TypingViewModel {
     weak var coordinator: TypingCoordinator?
     
-    @Published private(set) var placeholderText: String = ""
+    @Published private(set) var typingInfo: TypingInfo?
     @Published private(set) var wpm: Int = 0
     @Published private(set) var elapsedTimeString: String = "00:00:00"
     @Published private(set) var attributedText = NSAttributedString()
@@ -36,8 +36,8 @@ final class TypingViewModel {
     private func loadPlaceholderText() {
         fetchTypingTextUseCase.execute()
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] text in
-                self?.placeholderText = text
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] typingInfo in
+                self?.typingInfo = typingInfo
             })
             .store(in: &cancellables)
     }
@@ -86,7 +86,7 @@ extension TypingViewModel: TextProcessing {
             startTyping()
         }
         
-        let result = textProcessingUseCase.execute(inputText: inputText, placeholderText: placeholderText)
+        let result = textProcessingUseCase.execute(inputText: inputText, placeholderText: typingInfo?.typing ?? "")
         attributedText = createAttributedString(from: inputText, incorrectRanges: result.incorrectRanges)
         correctCharacterCount = result.correctCharacterCount
         isTypingEnded = result.isTypingEnded

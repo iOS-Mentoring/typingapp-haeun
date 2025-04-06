@@ -8,17 +8,17 @@
 import Combine
 
 protocol FetchTypngTextUseCase {
-    func execute() -> AnyPublisher<String, Error>
+    func execute() -> AnyPublisher<TypingInfo, Error>
 }
 
 final class FetchTypngTextUseCaseImpl: FetchTypngTextUseCase {
-    private let repository: TypingTextRepository
+    private let repository: TypingRepositoryProtocol
     
-    init(repository: TypingTextRepository) {
+    init(repository: TypingRepository) {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<String, Error> {
-        return repository.fetchTypingText()
+    func execute() -> AnyPublisher<TypingInfo, Error> {
+        return repository.fetchTypingInfoPublisher()
     }
 }

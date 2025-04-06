@@ -61,11 +61,11 @@ final class TypingViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.$placeholderText
+        viewModel.$typingInfo
             .receive(on: RunLoop.main)
-            .sink { [weak self] text in
-                guard let self = self else { return }
-                self.layeredTextView.setPlaceholderText(text)
+            .sink { [weak self] typingInfo in
+                guard let self = self, let typingInfo = typingInfo else { return }
+                self.layeredTextView.setPlaceholderText(typingInfo.typing)
             }
             .store(in: &cancellables)
         

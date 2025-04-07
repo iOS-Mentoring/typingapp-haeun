@@ -20,7 +20,6 @@ final class TypingInputAccessoryView: UIView {
         let label = UILabel()
         label.font = .pretendard(type: .semiBold, size: 13)
         label.textColor = .primaryEmphasis
-        label.text = "불안한 사람들"
         return label
     }()
     
@@ -28,7 +27,6 @@ final class TypingInputAccessoryView: UIView {
         let label = UILabel()
         label.font = .pretendard(type: .regular, size: 11)
         label.textColor = .primaryEmphasis
-        label.text = "프레드릭 베크만"
         return label
     }()
     
@@ -64,5 +62,10 @@ final class TypingInputAccessoryView: UIView {
     
     func setLinkButtonAction(_ action: UIAction) {
         linkButton.addAction(action, for: .touchUpInside)
+    }
+    
+    func configure(with title: String, author: String) {
+        titleLabel.text = title
+        authorLabel.text = author
     }
 }

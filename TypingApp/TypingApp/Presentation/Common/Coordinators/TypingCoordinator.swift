@@ -23,8 +23,8 @@ final class TypingCoordinator: NSObject, Coordinator {
         router.show(viewController, style: .push)
     }
     
-    func presentLinkWebView() {
-        let webViewModel = LinkWebViewViewModel()
+    func presentLinkWebView(with link: String) {
+        let webViewModel = LinkWebViewViewModel(urlString: link)
         let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
         linkWebViewController.modalPresentationStyle = .pageSheet
         router.show(linkWebViewController, style: .present)

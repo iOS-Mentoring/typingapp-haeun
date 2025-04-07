@@ -7,7 +7,6 @@
 
 import Foundation
 import Combine
-import UIKit
 
 final class TypingViewModel {
     weak var coordinator: TypingCoordinator?
@@ -58,36 +57,16 @@ final class TypingViewModel {
         let wordsPerMinute = Double(correctCharacterCount) / elapsedTime * 60
         self.wpm = Int(wordsPerMinute)
     }
-    
-    private func createAttributedString(from text: String, incorrectRanges: [NSRange]) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: text)
-        
-        attributedString.addAttribute(
-            .foregroundColor,
-            value: UIColor.primaryEmphasis,
-            range: NSRange(location: 0, length: text.count)
-        )
-        
-        for range in incorrectRanges {
-            attributedString.addAttribute(
-                .foregroundColor,
-                value: UIColor.primaryRed,
-                range: range
-            )
-        }
-        
-        return attributedString
-    }
 }
 
 extension TypingViewModel: TextProcessing {
-    func processInput(_ inputText: String) {
-        if cancellables.isEmpty {
+    func processInput(_ inputText: NSAttributedString) {
+        if currentElapsedTime == nil {
             startTyping()
         }
         
         let result = textProcessingUseCase.execute(inputText: inputText, placeholderText: typingInfo?.typing ?? "")
-        attributedText = createAttributedString(from: inputText, incorrectRanges: result.incorrectRanges)
+        attributedText = result.attributedText
         correctCharacterCount = result.correctCharacterCount
         isTypingEnded = result.isTypingEnded
         

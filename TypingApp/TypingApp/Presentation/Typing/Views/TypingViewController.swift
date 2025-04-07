@@ -53,9 +53,11 @@ final class TypingViewController: UIViewController {
     private func setTextView() {
         layeredTextView.configure(with: viewModel, inputAccessoryView: typingInputAccessoryView)
         view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
-        
+    }
+    
+    private func configureLinkButton(with link: String) {
         let action = UIAction { _ in
-            self.viewModel.coordinator?.presentLinkWebView()
+            self.viewModel.coordinator?.presentLinkWebView(with: link)
         }
         typingInputAccessoryView.setLinkButtonAction(action)
     }
@@ -66,6 +68,8 @@ final class TypingViewController: UIViewController {
             .sink { [weak self] typingInfo in
                 guard let self = self, let typingInfo = typingInfo else { return }
                 self.layeredTextView.setPlaceholderText(typingInfo.typing)
+                typingInputAccessoryView.configure(with: typingInfo.title, author: typingInfo.author)
+                configureLinkButton(with: typingInfo.url)
             }
             .store(in: &cancellables)
         

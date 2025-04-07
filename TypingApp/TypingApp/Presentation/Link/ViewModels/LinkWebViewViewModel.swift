@@ -16,8 +16,8 @@ final class LinkWebViewViewModel {
         urlRequestSubject.eraseToAnyPublisher()
     }
     
-    init() {
-        self.urlString = "https://google.com"
+    init(urlString: String) {
+        self.urlString = urlString
     }
     
     func loadWebPage() {

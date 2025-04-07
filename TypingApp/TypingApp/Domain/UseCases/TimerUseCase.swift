@@ -18,11 +18,11 @@ struct TimerState {
     let elapsedTime: TimeInterval
 }
 
-protocol TimerUseCase {
+protocol TimerUseCaseProtocol {
     func execute(_ command: TimerCommand) -> AnyPublisher<TimerState, Never>
 }
 
-final class TimerUseCaseImpl: TimerUseCase {
+final class TimerUseCase: TimerUseCaseProtocol {
     private var timer: AnyCancellable?
     private var startTime: Date?
     private let stateSubject = CurrentValueSubject<TimerState, Never>(

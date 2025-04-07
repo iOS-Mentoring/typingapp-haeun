@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol TextProcessingUseCase {
+protocol TextProcessingUseCaseProtocol {
     func execute(inputText: String, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool)
 }
 
-final class TextProcessingUseCaseImpl: TextProcessingUseCase {
+final class TextProcessingUseCase: TextProcessingUseCaseProtocol {
     func execute(inputText: String, placeholderText: String) -> (incorrectRanges: [NSRange], correctCharacterCount: Int, isTypingEnded: Bool) {
         let inputWords = inputText.components(separatedBy: " ")
         let targetWords = placeholderText.components(separatedBy: " ")

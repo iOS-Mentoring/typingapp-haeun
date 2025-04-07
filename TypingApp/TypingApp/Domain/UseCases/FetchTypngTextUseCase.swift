@@ -7,11 +7,11 @@
 
 import Combine
 
-protocol FetchTypngTextUseCase {
+protocol FetchTypngTextUseCaseProtocol {
     func execute() -> AnyPublisher<TypingInfo, Error>
 }
 
-final class FetchTypngTextUseCaseImpl: FetchTypngTextUseCase {
+final class FetchTypngTextUseCase: FetchTypngTextUseCaseProtocol {
     private let repository: TypingRepositoryProtocol
     
     init(repository: TypingRepository) {

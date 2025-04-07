@@ -8,27 +8,26 @@
 import UIKit
 
 final class TypingCoordinator: NSObject, Coordinator {
-    let navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    weak var parentCoordinator: Coordinator?
+    var router: Router
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(router: Router) {
+        self.router = router
     }
     
     func start() {
-        navigationController.delegate = self
-        let viewModel = TypingViewModel()
+        let viewModel = TypingViewModel(timerUseCase: TimerUseCase(), textProcessingUseCase: TextProcessingUseCase(), fetchTypingTextUseCase: FetchTypngTextUseCase(repository: TypingRepository()))
         viewModel.coordinator = self
         let viewController = TypingViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
+        
+        router.show(viewController, style: .push)
     }
     
     func presentLinkWebView() {
         let webViewModel = LinkWebViewViewModel()
         let linkWebViewController = LinkWebViewController(viewModel: webViewModel)
         linkWebViewController.modalPresentationStyle = .pageSheet
-        navigationController.present(linkWebViewController, animated: true)
+        router.show(linkWebViewController, style: .present)
     }
     
     func presentCompleteView() {
@@ -36,12 +35,11 @@ final class TypingCoordinator: NSObject, Coordinator {
         let viewController = CompletePopupViewController(viewModel: viewModel)
         let navVC = UINavigationController(rootViewController: viewController)
         navVC.modalPresentationStyle = .overFullScreen
-        navigationController.present(navVC, animated: true)
+        router.show(navVC, style: .present)
     }
     
     func showHistoryView() {
-        let historyCoordinator = HistoryCoordinator(navigationController: navigationController)
-        historyCoordinator.parentCoordinator = self
+        let historyCoordinator = HistoryCoordinator(router: router)
         childCoordinators.append(historyCoordinator)
         historyCoordinator.start()
     }

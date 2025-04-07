@@ -50,7 +50,7 @@ final class LayeredTextView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with processor: TextProcessing, placeholderText: String, inputAccessoryView: TypingInputAccessoryView) {
+    func configure(with processor: TextProcessing, inputAccessoryView: TypingInputAccessoryView) {
         self.processor = processor
         
         processor.attributedTextPublisher
@@ -62,8 +62,10 @@ final class LayeredTextView: UIView {
         
         typingTextView.delegate = self
         typingTextView.inputAccessoryView = inputAccessoryView
-        
-        placeholderTextView.text = placeholderText
+    }
+    
+    func setPlaceholderText(_ text: String) {
+        placeholderTextView.text = text
     }
     
     private func setupUI() {

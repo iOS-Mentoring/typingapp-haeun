@@ -8,18 +8,17 @@
 import UIKit
 
 final class HistoryCoordinator: Coordinator {
-    let navigationController: UINavigationController
     var childCoordinators = [Coordinator]()
-    weak var parentCoordinator: Coordinator?
+    var router: Router
     
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(router: Router) {
+        self.router = router
     }
     
     func start() {
         //let viewModel = HistoryViewModel()
         //viewModel.coordinator = self
         let viewController = HistoryViewController()
-        navigationController.pushViewController(viewController, animated: true)
+        router.show(viewController, style: .push)
     }
 }

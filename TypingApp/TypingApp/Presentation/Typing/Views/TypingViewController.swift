@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class TypingViewController: BaseViewController {
+final class TypingViewController: UIViewController {
     private let speedView = TypingSpeedView()
     private let typingInputAccessoryView = TypingInputAccessoryView()
     private let layeredTextView = LayeredTextView()
@@ -32,22 +32,18 @@ final class TypingViewController: BaseViewController {
         setTextView()
         setupBindings()
     }
-
+    
     private func setNavigationBar() {
         title = "하루필사"
         
+        let action = UIAction { _ in
+            self.viewModel.coordinator?.showHistoryView()
+        }
         let historyButton = UIBarButtonItem(
             image: .iconHistory,
-            style: .plain,
-            target: self,
-            action: #selector(historyButtonTapped)
+            primaryAction: action
         )
         navigationItem.rightBarButtonItem = historyButton
-    }
-    
-    @objc private func historyButtonTapped() {
-        let historyViewController = HistoryViewController()
-        navigationController?.pushViewController(historyViewController, animated: true)
     }
     
     private func setSpeedView() {
@@ -55,17 +51,24 @@ final class TypingViewController: BaseViewController {
     }
     
     private func setTextView() {
-        layeredTextView.configure(with: viewModel, placeholderText: viewModel.placeholderText, inputAccessoryView: typingInputAccessoryView)
+        layeredTextView.configure(with: viewModel, inputAccessoryView: typingInputAccessoryView)
         view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
         
-        typingInputAccessoryView.setLinkButtonAction(#selector(linkButtonTapped))
-    }
-    
-    @objc private func linkButtonTapped() {
-        viewModel.coordinator?.presentLinkWebView()
+        let action = UIAction { _ in
+            self.viewModel.coordinator?.presentLinkWebView()
+        }
+        typingInputAccessoryView.setLinkButtonAction(action)
     }
     
     private func setupBindings() {
+        viewModel.$typingInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] typingInfo in
+                guard let self = self, let typingInfo = typingInfo else { return }
+                self.layeredTextView.setPlaceholderText(typingInfo.typing)
+            }
+            .store(in: &cancellables)
+        
         viewModel.$elapsedTimeString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] elapsedTimeString in

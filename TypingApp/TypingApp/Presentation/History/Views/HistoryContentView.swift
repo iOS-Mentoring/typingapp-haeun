@@ -11,6 +11,13 @@ final class HistoryContentView: UIView {
     private let recordView = RecordView()
     private let typoView = TypoView()
     
+    private let backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = .crumpledWhitePaper
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -30,7 +37,7 @@ final class HistoryContentView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .clear
+        addSubview(backgroundImageView, autoLayout: [.top(0), .leadingSafeArea(-354), .height(1084), .width(1084)])
         addSubview(stackView, autoLayout: [.top(0), .leading(0), .trailing(0)])
     }
     

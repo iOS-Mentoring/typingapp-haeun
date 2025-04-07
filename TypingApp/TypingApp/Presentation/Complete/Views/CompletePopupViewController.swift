@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class CompletePopupViewController: BaseViewController {
+final class CompletePopupViewController: UIViewController {
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .crumpledWhitePaper
@@ -69,7 +69,7 @@ final class CompletePopupViewController: BaseViewController {
     private let recordView = RecordView()
     private let typoView = TypoView()
     
-    private let downloadButton: UIButton = {
+    private lazy var downloadButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.baseBackgroundColor = UIColor(hexCode: "111111")
         configuration.image = .iconInverseDownload
@@ -86,11 +86,14 @@ final class CompletePopupViewController: BaseViewController {
         )
         configuration.attributedTitle = AttributedString(attributedString)
         
-        let button = UIButton(configuration: configuration)
+        let downloadButtonTappedAction = UIAction { [weak self] _ in
+            self?.downloadButtonTapped()
+        }
+        let button = UIButton(configuration: configuration, primaryAction: downloadButtonTappedAction)
         return button
     }()
     
-    @objc private func downloadButtonTapped() {
+    private func downloadButtonTapped() {
         let captureFrame = CGRect(
             x: typoView.frame.minX - 20,
             y: typoView.frame.minY - 30,
@@ -126,20 +129,19 @@ final class CompletePopupViewController: BaseViewController {
     }
     
     private func setupNavigation() {
+        let action = UIAction { _ in
+            self.dismiss(animated: true)
+        }
+        
         let closeButton = UIBarButtonItem(
             image: .iconClose,
-            style: .plain,
-            target: self,
-            action: #selector(closeButtonTapped)
+            primaryAction: action
         )
         navigationItem.rightBarButtonItem = closeButton
     }
     
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
-    }
-    
     private func setupUI() {
+        view.backgroundColor = .gray200
         view.addSubview(backgroundImageView, autoLayout: [.topSafeArea(-224), .leadingSafeArea(-354), .height(1084), .width(1084)])
         view.addSubview(gradientView, autoLayout: [.topSafeArea(0), .leadingSafeArea(0), .trailingSafeArea(0), .height(74)])
         gradientView.layer.addSublayer(gradientLayer)
@@ -160,7 +162,6 @@ final class CompletePopupViewController: BaseViewController {
         )
         
         view.addSubview(downloadButton, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(70)])
-        downloadButton.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
     }
     
     private func showShareSheet(with image: UIImage) {

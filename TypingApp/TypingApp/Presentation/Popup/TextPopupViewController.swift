@@ -33,7 +33,7 @@ final class TextPopupViewController: UIViewController {
     
     private let buttonStackView = UIStackView()
     
-    private let closeButton: UIButton = {
+    private let skipButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("오늘 하루 보지 않기", for: .normal)
         button.setTitleColor(UIColor(hexCode: "#999999"), for: .normal)
@@ -49,13 +49,13 @@ final class TextPopupViewController: UIViewController {
         return button
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
     private func setupUI() {
+        modalTransitionStyle = .crossDissolve
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
         
         let divider = UIView()
@@ -72,17 +72,17 @@ final class TextPopupViewController: UIViewController {
         titleLabel.autoLayout([.height(126)])
         divider.autoLayout([.height(1)])
         buttonStackView.autoLayout([.height(60)])
-        view.addSubview(contentStackView, autoLayout: [.width(315), .center(0)])
+        view.addSubview(contentStackView, autoLayout: [.leading(30), .trailing(30), .centerY(0)])
         
         let verticalDivider = UIView()
         verticalDivider.backgroundColor = .gray_divider
         
-        buttonStackView.addArrangedSubview(closeButton)
+        buttonStackView.addArrangedSubview(skipButton)
         buttonStackView.addArrangedSubview(verticalDivider)
         buttonStackView.addArrangedSubview(openButton)
         buttonStackView.distribution = .fill
         
         verticalDivider.autoLayout([.width(1)])
-        closeButton.autoLayout([.widthEqual(to: openButton, constant: 1)])
+        skipButton.autoLayout([.widthEqual(to: openButton, constant: 1)])
     }
 }

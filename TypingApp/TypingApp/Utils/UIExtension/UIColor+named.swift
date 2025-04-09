@@ -16,6 +16,7 @@ public extension UIColor {
     static let gray300: UIColor = UIColor(named: "gray300") ?? UIColor.black
     static let gray200: UIColor = UIColor(named: "gray200") ?? UIColor.black
     static let gray100: UIColor = UIColor(named: "gray100") ?? UIColor.black
+    static let gray_divider: UIColor = UIColor(named: "gray_divider") ?? UIColor.black
 }
 
 public extension CGColor {

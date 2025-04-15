@@ -23,4 +23,7 @@ public extension UIImage {
     static let illustHaruWhole = UIImage(named: "illust_haru_whole")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     
     static let crumpledWhitePaper = UIImage(named: "crumpled-white-paper")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    
+    static let snsIconKakao = UIImage(named: "sns_ic_50_kakao")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let snsIconUrl = UIImage(named: "sns_ic_50_url")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
 }

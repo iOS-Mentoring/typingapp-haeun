@@ -26,4 +26,9 @@ public extension UIImage {
     
     static let snsIconKakao = UIImage(named: "sns_ic_50_kakao")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let snsIconUrl = UIImage(named: "sns_ic_50_url")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    
+    // tabbar icon
+    static let btnHistoryLine = UIImage(named: "btn_history_line")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    static let btnHomePre = UIImage(named: "btn_home_pre")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    static let btnMyNor = UIImage(named: "btn_my_nor")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
 }

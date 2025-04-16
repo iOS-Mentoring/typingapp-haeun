@@ -19,7 +19,7 @@ protocol RouterProtocol: AnyObject {
 }
 
 final class Router: RouterProtocol {
-    private let navigationController: UINavigationController
+    let navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

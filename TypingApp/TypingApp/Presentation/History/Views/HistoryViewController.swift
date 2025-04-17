@@ -64,14 +64,14 @@ final class HistoryViewController: UIViewController {
         view.addSubview(calendarView, autoLayout: [.topSafeArea(0), .leading(0), .trailing(0), .height(95)])
         view.addSubview(historyContentView, autoLayout: [.topNext(to: calendarView, constant: 20), .leading(20), .trailing(20), .bottom(0)])
         
-        view.addSubview(bottomView, autoLayout: [.bottom(0), .leading(0), .trailing(0), .height(80)])
+        view.addSubview(bottomView, autoLayout: [.bottomSafeArea(0), .leading(0), .trailing(0), .height(80)])
         bottomView.addSubview(buttonStackView, autoLayout: [.leading(20), .centerY(0)])
         buttonStackView.addArrangedSubview(downloadButton)
         buttonStackView.addArrangedSubview(shareButton)
         downloadButton.autoLayout([.width(36), .height(36)])
         shareButton.autoLayout([.width(36), .height(36)])
         
-        view.addSubview(haruImageView, autoLayout: [.trailing(0), .bottom(40), .width(110), .height(140)])
+        view.addSubview(haruImageView, autoLayout: [.trailing(0), .bottomSafeArea(40), .width(110), .height(140)])
     }
     
     private func setupBindings() {

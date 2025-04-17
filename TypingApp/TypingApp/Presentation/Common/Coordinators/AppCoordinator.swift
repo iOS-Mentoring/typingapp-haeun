@@ -18,13 +18,19 @@ final class AppCoordinator: Coordinator {
         
         let navigationController = UINavigationController()
         navigationController.view.backgroundColor = .gray200
+        navigationController.navigationBar.isHidden = true
         window.rootViewController = navigationController
         
         self.router = Router(navigationController: navigationController)
     }
     
     func start() {
-        let mainCoordinator = TypingCoordinator(router: router)
+        /*let mainCoordinator = TypingCoordinator(router: router)
+        childCoordinators.append(mainCoordinator)
+        mainCoordinator.start()
+        window.makeKeyAndVisible()*/
+        
+        let mainCoordinator = TabBarCoordinator(router: router)
         childCoordinators.append(mainCoordinator)
         mainCoordinator.start()
         window.makeKeyAndVisible()

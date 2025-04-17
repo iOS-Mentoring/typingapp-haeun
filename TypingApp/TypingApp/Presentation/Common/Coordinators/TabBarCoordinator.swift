@@ -17,6 +17,7 @@ final class TabBarCoordinator: NSObject, Coordinator {
     
     func start() {
         let tabBarController = UITabBarController()
+        setupTabBar(tabBarController)
         
         let historyNavigationController = UINavigationController()
         let homeNavigationController = UINavigationController()
@@ -28,13 +29,19 @@ final class TabBarCoordinator: NSObject, Coordinator {
         childCoordinators.append(historyCoordinator)
         historyCoordinator.start()
         
-        let homeCoordinator = TypingCoordinator(router: Router(navigationController: homeNavigationController))
+        let homeCoordinator = HomeCoordinator(router: Router(navigationController: homeNavigationController))
         childCoordinators.append(homeCoordinator)
         homeNavigationController.tabBarItem = UITabBarItem(title: "홈", image: .btnHomePre, tag: 1)
         childCoordinators.append(homeCoordinator)
         homeCoordinator.start()
         
-        tabBarController.viewControllers = [historyNavigationController, homeNavigationController]
+        let myPageCoordinator = MyPageCoordinator(router: Router(navigationController: myPageNavigationController))
+        childCoordinators.append(myPageCoordinator)
+        myPageNavigationController.tabBarItem = UITabBarItem(title: "마이페이지", image: .btnMyNor, tag: 2)
+        childCoordinators.append(myPageCoordinator)
+        myPageCoordinator.start()
+        
+        tabBarController.viewControllers = [historyNavigationController, homeNavigationController, myPageNavigationController]
         
         router.show(tabBarController, style: .push)
     }
@@ -42,8 +49,12 @@ final class TabBarCoordinator: NSObject, Coordinator {
     private func setupTabBar(_ tabBarController: UITabBarController) {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        // 탭바 배경색 설정 (원하는 색상으로 변경 가능)
-        appearance.backgroundColor = .systemBackground
+        appearance.backgroundColor = .primaryEmphasis
+        
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(hexCode: "#666666")
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(hexCode: "#666666") ?? .gray300]
+        appearance.stackedLayoutAppearance.selected.iconColor = .inversePrimaryEmphasis
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.inversePrimaryEmphasis]
         
         tabBarController.tabBar.standardAppearance = appearance
         tabBarController.tabBar.scrollEdgeAppearance = appearance

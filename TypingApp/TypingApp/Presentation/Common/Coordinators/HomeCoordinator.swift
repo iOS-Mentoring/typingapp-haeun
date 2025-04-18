@@ -16,7 +16,15 @@ final class HomeCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let viewController = HomeViewController()
+        let viewModel = HomeViewModel()
+        viewModel.coordinator = self
+        let viewController = HomeViewController(viewModel: viewModel)
         router.show(viewController, style: .push)
+    }
+    
+    func showTypingView() {
+        let typingCoordinator = TypingCoordinator(router: router)
+        childCoordinators.append(typingCoordinator)
+        typingCoordinator.start()
     }
 }

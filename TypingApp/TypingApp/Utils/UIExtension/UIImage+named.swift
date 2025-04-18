@@ -31,4 +31,9 @@ public extension UIImage {
     static let btnHistoryLine = UIImage(named: "btn_history_line")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     static let btnHomePre = UIImage(named: "btn_home_pre")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
     static let btnMyNor = UIImage(named: "btn_my_nor")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+    
+    // home
+    static let iconArrowThin = UIImage(named: "icon-arrow-thin")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let miText = UIImage(named: "mi_text")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let miText2 = UIImage(named: "mi_text_2")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
 }

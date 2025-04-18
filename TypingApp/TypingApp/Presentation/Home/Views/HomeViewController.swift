@@ -61,5 +61,17 @@ final class HomeViewController: UIViewController {
         
         view.addSubview(titleLabel, autoLayout: [.topSafeArea(120), .leading(30)])
         view.addSubview(contentLabel, autoLayout: [.topNext(to: titleLabel, constant: 10), .leading(30)])
+        
+        let pilsaButton = NavigationButton(title: "필사하러 가기", image: .miText)
+        let challengeButton = NavigationButton(title: "타이핑 대결하기", image: .miText2)
+        let stackView = UIStackView()
+        stackView.spacing = 5
+        
+        stackView.addArrangedSubview(pilsaButton)
+        stackView.addArrangedSubview(challengeButton)
+        
+        view.addSubview(stackView, autoLayout: [.leading(25), .bottomSafeArea(25), .trailing(25)])
+        pilsaButton.autoLayout([.widthEqual(to: challengeButton, constant: 1), .heightEqual(to: challengeButton, constant: 1), .aspectRatio(CGFloat(165/160))])
+        
     }
 }

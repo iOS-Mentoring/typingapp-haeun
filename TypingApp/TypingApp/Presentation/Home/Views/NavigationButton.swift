@@ -36,6 +36,7 @@ final class NavigationButton: UIButton {
     private func setupUI() {
         backgroundColor = .primaryEmphasis
         
+        stackView.isUserInteractionEnabled = false
         stackView.addArrangedSubview(customTitleLabel)
         stackView.addArrangedSubview(arrowImageView)
         addSubview(stackView, autoLayout: [.top(20), .leading(20)])

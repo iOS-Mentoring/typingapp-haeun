@@ -33,6 +33,11 @@ final class TypingViewController: UIViewController {
         setupBindings()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     private func setNavigationBar() {
         title = "하루필사"
         

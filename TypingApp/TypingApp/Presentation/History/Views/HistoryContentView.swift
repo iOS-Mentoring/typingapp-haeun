@@ -22,8 +22,23 @@ final class HistoryContentView: UIView {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 40
+        stackView.alignment = .leading
         return stackView
     }()
+    
+    private let downloadButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.iconDownload, for: .normal)
+        return button
+    }()
+    
+    private let shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.iconShare, for: .normal)
+        return button
+    }()
+    
+    private let buttonStackView = UIStackView()
     
     private let emptyView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 40))
     
@@ -38,7 +53,13 @@ final class HistoryContentView: UIView {
     
     private func setupUI() {
         addSubview(backgroundImageView, autoLayout: [.top(0), .leadingSafeArea(-354), .height(1084), .width(1084)])
-        addSubview(stackView, autoLayout: [.top(0), .leading(0), .trailing(0)])
+        addSubview(stackView, autoLayout: [.top(20), .leading(0), .trailing(0)])
+        
+        buttonStackView.addArrangedSubview(downloadButton)
+        buttonStackView.addArrangedSubview(shareButton)
+        buttonStackView.spacing = 8
+        downloadButton.autoLayout([.width(36), .height(36)])
+        shareButton.autoLayout([.width(36), .height(36)])
     }
     
     func configure(with day: DayModel) {
@@ -49,20 +70,18 @@ final class HistoryContentView: UIView {
         
         if day.hasTypingResult {
             stackView.addArrangedSubview(recordView)
+            recordView.autoLayout([.widthEqual(to: stackView, constant: 1)])
             stackView.addArrangedSubview(typoView)
-            typoView.configure(
+            typoView.configure(with: TypoInfo(
                 text: "어른이 되는 것이 끔찍한 이유는 아무도 우리에게 관심이 없고, 앞으로는 스스로 모든 일을 처리하고 세상이 어떤 식으로 돌아가는지 파악해야 한다는 것을 깨닫는 순간이 찾아오기 때문이다.",
                 title: "불안한 사람들",
                 author: "프레드릭 베크만"
-            )
+            ))
+            stackView.addArrangedSubview(buttonStackView)
         } else {
             stackView.addArrangedSubview(emptyView)
             stackView.addArrangedSubview(typoView)
-            typoView.configure(
-                text: "하루가 기다리고 있어요!\n얼른 필사하며 하루를 쌓아보세요!",
-                title: "",
-                author: ""
-            )
+            typoView.configure(with: TypoInfo.empty)
         }
     }
 }

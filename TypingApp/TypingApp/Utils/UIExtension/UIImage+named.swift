@@ -15,6 +15,8 @@ public extension UIImage {
     static let iconDoubleQuotes = UIImage(named: "icon_double_quotes")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconInverseDownload = UIImage(named: "icon_inverse_download")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconInverseShare = UIImage(named: "icon_inverse_share")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconDownload = UIImage(named: "btn_download")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconShare = UIImage(named: "btn_share")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconLink = UIImage(named: "icon_link")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconHistory = UIImage(named: "icon_history")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconLeftArrow = UIImage(named: "icon_left_arrow")?.withRenderingMode(.alwaysOriginal) ?? UIImage()

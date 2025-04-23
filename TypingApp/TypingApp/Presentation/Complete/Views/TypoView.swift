@@ -54,7 +54,7 @@ final class TypoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setTextViewAttributedText(text: String) {
+    private func setTextViewAttributedText(text: String, isEmpty: Bool) {
         let style = NSMutableParagraphStyle()
         let lineheight = 28.0
         style.minimumLineHeight = lineheight
@@ -63,7 +63,8 @@ final class TypoView: UIView {
             string: text,
             attributes: [
                 .paragraphStyle: style,
-                .font: UIFont.pretendard(type: .regular, size: 18)
+                .font: UIFont.pretendard(type: .regular, size: 18),
+                .foregroundColor: isEmpty ? UIColor(hexCode: "#000000", alpha: 0.5) ?? .primaryEmphasis : .primaryEmphasis
             ])
     }
     
@@ -76,9 +77,9 @@ final class TypoView: UIView {
         addSubview(stackView, autoLayout: [.leading(0), .bottom(0), .topNext(to: textView, constant: 30)])
     }
     
-    func configure(text: String, title: String, author: String) {
-        setTextViewAttributedText(text: text)
-        titleLabel.text = title
-        authorLabel.text = author
+    func configure(with info: TypoInfo) {
+        setTextViewAttributedText(text: info.text, isEmpty: info.title == nil)
+        titleLabel.text = info.title
+        authorLabel.text = info.author
     }
 }

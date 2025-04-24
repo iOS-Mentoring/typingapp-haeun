@@ -20,6 +20,7 @@ public extension UIImage {
     static let iconLink = UIImage(named: "icon_link")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconHistory = UIImage(named: "icon_history")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let iconLeftArrow = UIImage(named: "icon_left_arrow")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
+    static let iconArrow = UIImage(named: "icon_arrow")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     
     static let illustHaruHalf = UIImage(named: "illust_haru_half")?.withRenderingMode(.alwaysOriginal) ?? UIImage()
     static let illustHaruWhole = UIImage(named: "illust_haru_whole")?.withRenderingMode(.alwaysOriginal) ?? UIImage()

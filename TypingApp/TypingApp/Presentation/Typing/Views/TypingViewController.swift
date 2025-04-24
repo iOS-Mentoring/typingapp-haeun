@@ -27,7 +27,7 @@ final class TypingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBar()
+        title = "하루필사"
         setSpeedView()
         setTextView()
         setupBindings()
@@ -36,19 +36,6 @@ final class TypingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-    }
-    
-    private func setNavigationBar() {
-        title = "하루필사"
-        
-        let action = UIAction { _ in
-            self.viewModel.coordinator?.showHistoryView()
-        }
-        let historyButton = UIBarButtonItem(
-            image: .iconHistory,
-            primaryAction: action
-        )
-        navigationItem.rightBarButtonItem = historyButton
     }
     
     private func setSpeedView() {
@@ -69,7 +56,7 @@ final class TypingViewController: UIViewController {
     
     private func setupBindings() {
         viewModel.$typingInfo
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] typingInfo in
                 guard let self = self, let typingInfo = typingInfo else { return }
                 self.layeredTextView.setPlaceholderText(typingInfo.typing)

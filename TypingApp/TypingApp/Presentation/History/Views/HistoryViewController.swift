@@ -11,6 +11,8 @@ import Combine
 final class HistoryViewController: UIViewController {
     private let calendarViewModel = CalendarViewModel()
     private lazy var calendarView = CalendarView(viewModel: calendarViewModel)
+    private let viewModel: HistoryViewModel
+    
     private let historyContentView = HistoryContentView()
     
     private let todayButton: UIButton = {
@@ -38,6 +40,15 @@ final class HistoryViewController: UIViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
+    init(viewModel: HistoryViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -59,5 +70,11 @@ final class HistoryViewController: UIViewController {
                 self?.historyContentView.configure(with: day)
             }
             .store(in: &cancellables)
+        
+        
+        let todayAction = UIAction { _ in
+            //calendarViewModel.
+        }
+        todayButton.addAction(todayAction, for: .touchUpInside)
     }
 }

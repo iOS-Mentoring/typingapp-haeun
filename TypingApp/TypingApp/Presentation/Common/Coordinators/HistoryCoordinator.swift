@@ -16,9 +16,9 @@ final class HistoryCoordinator: Coordinator {
     }
     
     func start() {
-        //let viewModel = HistoryViewModel()
+        let viewModel = HistoryViewModel(fetchCalendarDataUseCase: FetchCalendarDataUseCase(repository: CalendarRepository()))
         //viewModel.coordinator = self
-        let viewController = HistoryViewController()
+        let viewController = HistoryViewController(viewModel: viewModel)
         router.show(viewController, style: .push)
     }
 }

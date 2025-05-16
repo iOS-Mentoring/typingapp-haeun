@@ -13,42 +13,27 @@ final class HistoryViewController: UIViewController {
     private lazy var calendarView = CalendarView(viewModel: calendarViewModel)
     private let historyContentView = HistoryContentView()
     
-    private let bottomView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .primaryEmphasis
-        return view
-    }()
-    
-    private let downloadButton: UIButton = {
+    private let todayButton: UIButton = {
         let button = UIButton()
-        button.setImage(.iconInverseDownload, for: .normal)
-        button.layer.cornerRadius = 18
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor(white: 1, alpha: 0.5).cgColor
+        var config = UIButton.Configuration.plain()
+        var titleContainer = AttributeContainer()
+        titleContainer.font = .pretendard(type: .semiBold, size: 12)
+        titleContainer.foregroundColor = .primaryEmphasis
+        config.attributedTitle = AttributedString("오늘", attributes: titleContainer)
+        config.image = .iconArrow
+        config.imagePlacement = .trailing
+        config.imagePadding = 6
+        config.cornerStyle = .capsule
+        config.background.backgroundColor = .white
+        
+        button.layer.shadowColor = .primaryEmphasis
+        button.layer.shadowOffset = CGSize(width: 0, height: 2)
+        button.layer.shadowRadius = 4
+        button.layer.shadowOpacity = 0.12
+        
+        button.configuration = config
+        button.frame.size = CGSize(width: 54, height: 32)
         return button
-    }()
-    
-    private let shareButton: UIButton = {
-        let button = UIButton()
-        button.setImage(.iconInverseShare, for: .normal)
-        button.layer.cornerRadius = 18
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor(white: 1, alpha: 0.5).cgColor
-        return button
-    }()
-    
-    private let buttonStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 12
-        return stackView
-    }()
-    
-    private let haruImageView: UIImageView = {
-        let imageView = UIImageView(image: .illustHaruWhole)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
     }()
     
     private var cancellables = Set<AnyCancellable>()
@@ -62,16 +47,8 @@ final class HistoryViewController: UIViewController {
     private func setupUI() {
         title = "하루 보관함"
         view.addSubview(calendarView, autoLayout: [.topSafeArea(0), .leading(0), .trailing(0), .height(95)])
-        view.addSubview(historyContentView, autoLayout: [.topNext(to: calendarView, constant: 20), .leading(20), .trailing(20), .bottom(0)])
-        
-        view.addSubview(bottomView, autoLayout: [.bottomSafeArea(0), .leading(0), .trailing(0), .height(80)])
-        bottomView.addSubview(buttonStackView, autoLayout: [.leading(20), .centerY(0)])
-        buttonStackView.addArrangedSubview(downloadButton)
-        buttonStackView.addArrangedSubview(shareButton)
-        downloadButton.autoLayout([.width(36), .height(36)])
-        shareButton.autoLayout([.width(36), .height(36)])
-        
-        view.addSubview(haruImageView, autoLayout: [.trailing(0), .bottomSafeArea(40), .width(110), .height(140)])
+        view.addSubview(historyContentView, autoLayout: [.topNext(to: calendarView, constant: 0), .leading(20), .trailing(20), .bottom(0)])
+        view.addSubview(todayButton, autoLayout: [.bottomSafeArea(30), .centerX(0)])
     }
     
     private func setupBindings() {

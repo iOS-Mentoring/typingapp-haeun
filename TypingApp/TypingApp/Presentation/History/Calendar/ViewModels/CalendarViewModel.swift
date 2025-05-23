@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class CalendarViewModel {
-    private let calendar = Calendar.current
+    /*private let calendar = Calendar.current
     private var allDays: [DayModel] = []
     private var selectedDateIndex: Int? {
         didSet {
@@ -125,4 +125,6 @@ final class CalendarViewModel {
         let day = calendar.component(.day, from: date)
         return day % 3 == 0
     }
+     */
 }
+

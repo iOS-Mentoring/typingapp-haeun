@@ -7,32 +7,31 @@
 
 import UIKit
 import Combine
+import SwiftUI
+
+enum CalendarSection: Hashable {
+    case header
+    case calendar
+}
 
 final class CalendarView: UIView {
-    private let weekdayHeaderView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        return stackView
-    }()
+    private lazy var weekCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+    private var dataSource: UICollectionViewDiffableDataSource<CalendarSection, CalendarDay>!
     
-    private lazy var weekCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.register(DayCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        return collectionView
-    }()
     
-    private let viewModel: CalendarViewModel
     private var cancellables = Set<AnyCancellable>()
     
-    init(viewModel: CalendarViewModel) {
-        self.viewModel = viewModel
+    private let daySelectedSubject = PassthroughSubject<Date, Never>()
+    
+    var daySelected: AnyPublisher<Date, Never> {
+        daySelectedSubject.eraseToAnyPublisher()
+    }
+    
+    init() {
         super.init(frame: .zero)
         setupUI()
         setupBindings()
-        setupWeekdayHeader(viewModel.weekdaySymbols())
+        configureCollectionView()
     }
     
     required init?(coder: NSCoder) {
@@ -42,8 +41,64 @@ final class CalendarView: UIView {
     private func setupUI() {
         backgroundColor = .inversePrimaryEmphasis
         
-        addSubview(weekdayHeaderView, autoLayout: [.top(10), .leading(10), .trailing(10), .height(12)])
-        addSubview(weekCollectionView, autoLayout: [.topNext(to: weekdayHeaderView, constant: 10), .leading(10), .trailing(10), .height(60)])
+        addSubview(weekCollectionView, autoLayout: [.top(0), .leading(10), .trailing(10), .height(95)])
+    }
+    
+    private func setupBindings() {
+        /*viewModel.daysPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.weekCollectionView.reloadData()
+                
+                DispatchQueue.main.async {
+                    self?.scrollToTodayWeek()
+                    self?.updateSelectedCell()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.selectedDayPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] day in
+                guard let self = self, let day = day else { return }
+                self.updateSelectedCell()
+            }
+            .store(in: &cancellables)*/
+    }
+    
+    private func updateSelectedCell() {
+        for cell in weekCollectionView.visibleCells {
+            if let dayCell = cell as? DayCell {
+                dayCell.setSelected(false)
+            }
+        }
+        
+        /*if let selectedIndex = viewModel.selectedIndex(),
+           let cell = weekCollectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0)) as? DayCell {
+            cell.setSelected(true)
+        }*/
+    }
+    
+    private func scrollToTodayWeek() {
+        /*if let todayWeekIndex = viewModel.todayWeekIndex() {
+            let indexPath = IndexPath(item: todayWeekIndex, section: 0)
+            weekCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+        }*/
+    }
+}
+
+extension CalendarView {
+    private func configureCollectionView() {
+        weekCollectionView.backgroundColor = .inversePrimaryEmphasis
+        weekCollectionView.register(DayCell.self, forCellWithReuseIdentifier: DayCell.reuseIdentifier)
+        weekCollectionView.delegate = self
+        
+        dataSource = UICollectionViewDiffableDataSource(collectionView: weekCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCell.reuseIdentifier, for: indexPath) as? DayCell else { return UICollectionViewCell() }
+            cell.configure(with: itemIdentifier)
+            return cell
+        })
+        
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -65,92 +120,16 @@ final class CalendarView: UIView {
         return UICollectionViewCompositionalLayout(section: section)
     }
     
-    private func setupWeekdayHeader(_ symbols: [String]) {
-        weekdayHeaderView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for symbol in symbols {
-            let label = UILabel()
-            label.text = symbol
-            label.textAlignment = .center
-            label.font = .pretendard(type: .regular, size: 10)
-            if symbol == "Sun" {
-                label.textColor = .primaryRed
-            } else {
-                label.textColor = .primaryEmphasis
-            }
-            weekdayHeaderView.addArrangedSubview(label)
-        }
-    }
-    
-    private func setupBindings() {
-        viewModel.daysPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.weekCollectionView.reloadData()
-                
-                DispatchQueue.main.async {
-                    self?.scrollToTodayWeek()
-                    self?.updateSelectedCell()
-                }
-            }
-            .store(in: &cancellables)
-        
-        viewModel.selectedDayPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] day in
-                guard let self = self, let day = day else { return }
-                self.updateSelectedCell()
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func updateSelectedCell() {
-        for cell in weekCollectionView.visibleCells {
-            if let dayCell = cell as? DayCell {
-                dayCell.setSelected(false)
-            }
-        }
-        
-        if let selectedIndex = viewModel.selectedIndex(),
-           let cell = weekCollectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0)) as? DayCell {
-            cell.setSelected(true)
-        }
-    }
-    
-    private func scrollToTodayWeek() {
-        if let todayWeekIndex = viewModel.todayWeekIndex() {
-            let indexPath = IndexPath(item: todayWeekIndex, section: 0)
-            weekCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-        }
-    }
-}
-
-extension CalendarView: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.days.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCell.reuseIdentifier, for: indexPath) as? DayCell,
-              indexPath.item < viewModel.days.count else {
-            return UICollectionViewCell()
-        }
-        
-        let day = viewModel.days[indexPath.item]
-        let isSelected = viewModel.selectedIndex() == indexPath.item
-        
-        cell.configure(with: day, selected: isSelected)
-        
-        return cell
+    func applySnapshot(items: [CalendarDay], animatingDifferences: Bool = true) {
+        var snapshot = NSDiffableDataSourceSnapshot<CalendarSection, CalendarDay>()
+        snapshot.appendSections([.calendar])
+        snapshot.appendItems(items, toSection: .calendar)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }
 
 extension CalendarView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.selectDay(at: indexPath.item)
+        //viewModel.selectDay(at: indexPath.item)
     }
 }

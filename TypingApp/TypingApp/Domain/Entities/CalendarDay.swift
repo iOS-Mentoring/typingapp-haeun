@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct DayModel {
+struct CalendarDay: Hashable {
     let date: Date
-    let dateString: String
     let hasTypingResult: Bool
+    let isInValidRange: Bool
+    let isToday: Bool
 }

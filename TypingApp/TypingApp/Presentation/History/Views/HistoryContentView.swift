@@ -62,7 +62,7 @@ final class HistoryContentView: UIView {
         shareButton.autoLayout([.width(36), .height(36)])
     }
     
-    func configure(with day: DayModel) {
+    func configure(with day: CalendarDay) {
         for subview in stackView.arrangedSubviews {
             stackView.removeArrangedSubview(subview)
             subview.removeFromSuperview()

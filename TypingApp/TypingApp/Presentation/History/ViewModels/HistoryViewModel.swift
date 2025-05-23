@@ -8,29 +8,49 @@
 import Foundation
 import Combine
 
-@MainActor
-final class HistoryViewModel {
-    @Published private(set) var dateInfo: [Date]?
+struct HistoryViewModelInput: ViewModelInput {
+    let viewDidLoad: AnyPublisher<Void, Never>
+    let daySelected: AnyPublisher<Date, Never>
+}
+
+struct HistoryViewModelOutput: ViewModelOutput {
+    let dayInfo: AnyPublisher<[CalendarDay], Never>
+}
+
+final class HistoryViewModel: ViewModelProtocol {
     
-    private let fetchCalendarDataUseCase: FetchCalendarDataUseCaseProtocol
+    private var cancellables = Set<AnyCancellable>()
+    private let calendarUseCase: CalendarUseCaseProtocol
     
-    init(fetchCalendarDataUseCase: FetchCalendarDataUseCaseProtocol) {
-        self.fetchCalendarDataUseCase = fetchCalendarDataUseCase
+    typealias Input = HistoryViewModelInput
+    typealias Output = HistoryViewModelOutput
+    
+    private var dayInfoSubject = PassthroughSubject<[CalendarDay], Never>()
+    
+    init(calendarUseCase: CalendarUseCaseProtocol) {
+        self.calendarUseCase = calendarUseCase
     }
     
-    nonisolated func loadCalendarData() async throws -> [Date] {
-        return try await fetchCalendarDataUseCase.execute()
+    func transform(input: Input) -> Output {
+        input.viewDidLoad
+            .sink { [weak self] in
+                self?.fetchCalendarData()
+            }
+            .store(in: &cancellables)
+        
+        return Output(
+            dayInfo: dayInfoSubject.eraseToAnyPublisher()
+        )
     }
     
-    func loadCalendarData() {
+    private func fetchCalendarData() {
         Task {
             do {
-                let data = try await loadCalendarData()
-                print(data)
+                let dayInfo = try await calendarUseCase.fetchCalendarData()
+                dayInfoSubject.send(dayInfo)
             } catch {
                 
             }
         }
-        
     }
 }

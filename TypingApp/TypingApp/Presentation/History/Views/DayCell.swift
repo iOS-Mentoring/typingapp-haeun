@@ -62,11 +62,10 @@ final class DayCell: UICollectionViewCell {
     }
     
     func configure(with day: CalendarDay) {
-        weekdaySymbolLabel.text = day.weekdayText
+        weekdaySymbolLabel.text = day.date.formattedDateString(dateFormat: "EEE")
         weekdaySymbolLabel.textColor = weekdaySymbolLabel.text == "Sun" ? .primaryRed : .primaryEmphasis
         dayLabel.text = day.date.formattedDateString(dateFormat: "dd")
         
-        //setSelected()
         typingIndicator.isHidden = !day.hasTypingResult
     }
     

@@ -11,5 +11,4 @@ struct CalendarDay: Hashable {
     let date: Date
     let hasTypingResult: Bool
     let isInValidRange: Bool
-    let isToday: Bool
 }

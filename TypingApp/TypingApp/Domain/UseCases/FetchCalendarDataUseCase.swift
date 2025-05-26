@@ -48,13 +48,12 @@ final class CalendarUseCase: CalendarUseCaseProtocol {
             let dayStartDate = calendar.startOfDay(for: currentDate)
             let hasResult = resultDateSet.contains(dayStartDate)
             let isInValidRange = dayStartDate >= validStartDate && dayStartDate <= validEndDate
-            let isToday = calendar.isDate(currentDate, inSameDayAs: Date())
+            //let isToday = calendar.isDate(currentDate, inSameDayAs: Date())
             
             let calendarDay = CalendarDay(
                 date: currentDate,
                 hasTypingResult: hasResult,
-                isInValidRange: isInValidRange,
-                isToday: isToday
+                isInValidRange: isInValidRange
             )
             
             calendarDays.append(calendarDay)

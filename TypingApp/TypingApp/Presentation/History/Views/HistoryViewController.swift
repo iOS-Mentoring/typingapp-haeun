@@ -9,7 +9,6 @@ import UIKit
 import Combine
 
 final class HistoryViewController: UIViewController {
-    private let calendarViewModel = CalendarViewModel()
     private lazy var calendarView = CalendarView()
     private let viewModel: HistoryViewModel
     
@@ -67,7 +66,7 @@ final class HistoryViewController: UIViewController {
     private func bind() {
         let input = HistoryViewModelInput(
             viewDidLoad: viewDidLoadTrigger.eraseToAnyPublisher(),
-            daySelected: calendarView.daySelected.eraseToAnyPublisher()
+            dayIndexSelected: calendarView.daySelected.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(input: input)
@@ -78,6 +77,13 @@ final class HistoryViewController: UIViewController {
             .sink { [weak self] dayInfo in
                 guard let self else { return }
                 calendarView.applySnapshot(items: dayInfo)
+            }
+            .store(in: &cancellables)
+        
+        output.selectedDayIndex
+            .sink { [weak self] dayIndex in
+                guard let self else { return }
+                calendarView.updateSelectedCell(at: dayIndex)
             }
             .store(in: &cancellables)
         

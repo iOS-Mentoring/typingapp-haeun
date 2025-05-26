@@ -10,11 +10,12 @@ import Combine
 
 struct HistoryViewModelInput: ViewModelInput {
     let viewDidLoad: AnyPublisher<Void, Never>
-    let daySelected: AnyPublisher<Date, Never>
+    let dayIndexSelected: AnyPublisher<IndexPath, Never>
 }
 
 struct HistoryViewModelOutput: ViewModelOutput {
     let dayInfo: AnyPublisher<[CalendarDay], Never>
+    let selectedDayIndex: AnyPublisher<IndexPath, Never>
 }
 
 final class HistoryViewModel: ViewModelProtocol {
@@ -26,6 +27,7 @@ final class HistoryViewModel: ViewModelProtocol {
     typealias Output = HistoryViewModelOutput
     
     private var dayInfoSubject = PassthroughSubject<[CalendarDay], Never>()
+    private var selectedIndexSubject = PassthroughSubject<IndexPath, Never>()
     
     init(calendarUseCase: CalendarUseCaseProtocol) {
         self.calendarUseCase = calendarUseCase
@@ -38,8 +40,15 @@ final class HistoryViewModel: ViewModelProtocol {
             }
             .store(in: &cancellables)
         
+        input.dayIndexSelected
+            .sink { [weak self] selectedDayIndex in
+                self?.selectedIndexSubject.send(selectedDayIndex)
+            }
+            .store(in: &cancellables)
+        
         return Output(
-            dayInfo: dayInfoSubject.eraseToAnyPublisher()
+            dayInfo: dayInfoSubject.eraseToAnyPublisher(),
+            selectedDayIndex: selectedIndexSubject.eraseToAnyPublisher()
         )
     }
     

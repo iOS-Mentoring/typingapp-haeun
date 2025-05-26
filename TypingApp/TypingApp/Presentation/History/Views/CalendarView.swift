@@ -10,7 +10,6 @@ import Combine
 import SwiftUI
 
 enum CalendarSection: Hashable {
-    case header
     case calendar
 }
 
@@ -18,24 +17,24 @@ final class CalendarView: UIView {
     private lazy var weekCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     private var dataSource: UICollectionViewDiffableDataSource<CalendarSection, CalendarDay>!
     
-    
     private var cancellables = Set<AnyCancellable>()
     
-    private let daySelectedSubject = PassthroughSubject<Date, Never>()
+    private let daySelectedSubject = PassthroughSubject<IndexPath, Never>()
     
-    var daySelected: AnyPublisher<Date, Never> {
+    var daySelected: AnyPublisher<IndexPath, Never> {
         daySelectedSubject.eraseToAnyPublisher()
     }
+    
+    private var selectedIndexPath: IndexPath?
     
     init() {
         super.init(frame: .zero)
         setupUI()
-        setupBindings()
         configureCollectionView()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(coder:) has not been implementㅂed")
     }
     
     private func setupUI() {
@@ -44,46 +43,17 @@ final class CalendarView: UIView {
         addSubview(weekCollectionView, autoLayout: [.top(0), .leading(10), .trailing(10), .height(95)])
     }
     
-    private func setupBindings() {
-        /*viewModel.daysPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.weekCollectionView.reloadData()
-                
-                DispatchQueue.main.async {
-                    self?.scrollToTodayWeek()
-                    self?.updateSelectedCell()
-                }
-            }
-            .store(in: &cancellables)
-        
-        viewModel.selectedDayPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] day in
-                guard let self = self, let day = day else { return }
-                self.updateSelectedCell()
-            }
-            .store(in: &cancellables)*/
-    }
-    
-    private func updateSelectedCell() {
-        for cell in weekCollectionView.visibleCells {
-            if let dayCell = cell as? DayCell {
-                dayCell.setSelected(false)
-            }
+    func updateSelectedCell(at index: IndexPath) {
+        if let previousIndexPath = selectedIndexPath,
+           let previousCell = weekCollectionView.cellForItem(at: previousIndexPath) as? DayCell {
+            previousCell.setSelected(false)
         }
         
-        /*if let selectedIndex = viewModel.selectedIndex(),
-           let cell = weekCollectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0)) as? DayCell {
-            cell.setSelected(true)
-        }*/
-    }
-    
-    private func scrollToTodayWeek() {
-        /*if let todayWeekIndex = viewModel.todayWeekIndex() {
-            let indexPath = IndexPath(item: todayWeekIndex, section: 0)
-            weekCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-        }*/
+        if let newCell = weekCollectionView.cellForItem(at: index) as? DayCell {
+            newCell.setSelected(true)
+        }
+        selectedIndexPath = index
+        weekCollectionView.scrollToItem(at: index, at: .centeredHorizontally, animated: false)
     }
 }
 
@@ -96,6 +66,11 @@ extension CalendarView {
         dataSource = UICollectionViewDiffableDataSource(collectionView: weekCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCell.reuseIdentifier, for: indexPath) as? DayCell else { return UICollectionViewCell() }
             cell.configure(with: itemIdentifier)
+            if self.selectedIndexPath == indexPath {
+                cell.setSelected(true)
+            } else {
+                cell.setSelected(false)
+            }
             return cell
         })
         
@@ -130,6 +105,6 @@ extension CalendarView {
 
 extension CalendarView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //viewModel.selectDay(at: indexPath.item)
+        daySelectedSubject.send(indexPath)
     }
 }

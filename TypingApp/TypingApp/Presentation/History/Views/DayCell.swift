@@ -67,6 +67,8 @@ final class DayCell: UICollectionViewCell {
         dayLabel.text = day.date.formattedDateString(dateFormat: "dd")
         
         typingIndicator.isHidden = !day.hasTypingResult
+        dayLabel.textColor = day.isInValidRange ? .primaryEmphasis : .gray300
+        self.isUserInteractionEnabled = day.isInValidRange
     }
     
     func setSelected(_ selected: Bool) {

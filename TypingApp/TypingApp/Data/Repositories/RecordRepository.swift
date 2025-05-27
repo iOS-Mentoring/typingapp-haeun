@@ -8,7 +8,7 @@
 import Foundation
 
 final class RecordRepository: RecordRepositoryProtocol {
-    func fetchRecord() async throws -> Record {
+    func fetchRecord(for date: Date) async throws -> Record {
         return MockRecordData.record
     }
 }

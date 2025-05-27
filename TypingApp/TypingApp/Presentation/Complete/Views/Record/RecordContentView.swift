@@ -42,9 +42,9 @@ final class RecordContentView: UIView {
         setupUI()
     }
     
-    convenience init(titleText: String, contentText: String, isLastItem: Bool = false) {
+    convenience init(titleText: String, isLastItem: Bool = false) {
         self.init(frame: .zero)
-        configure(titleText: titleText, contentText: contentText)
+        titleLabel.text = titleText
         separateView.isHidden = isLastItem
     }
     
@@ -60,10 +60,9 @@ final class RecordContentView: UIView {
         addSubview(separateView, autoLayout: [.centerY(0), .height(35), .width(0.5), .trailing(0)])
     }
     
-    private func configure(titleText: String, contentText: String) {
-        titleLabel.text = titleText
+    func configure(content contentText: String) {
         contentLabel.text = contentText
-        if titleText == "ACC" {
+        if titleLabel.text == "ACC" {
             let attributedString = NSMutableAttributedString(string: contentText + "%")
             attributedString.addAttribute(.font, value: UIFont.pretendard(type: .bold, size: 14), range: NSRange(location: contentText.count, length: 1))
             contentLabel.attributedText = attributedString

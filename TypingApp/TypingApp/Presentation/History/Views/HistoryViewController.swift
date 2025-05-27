@@ -87,6 +87,19 @@ final class HistoryViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        output.recordInfo
+            .sink { [weak self] recordState in
+                guard let self else { return }
+                switch recordState {
+                case .record(let record):
+                    self.historyContentView.configureWithRecord(record)
+                case .empty:
+                    self.historyContentView.configureEmpty()
+                }
+                
+            }
+            .store(in: &cancellables)
+        
         let todayAction = UIAction { _ in
             //calendarViewModel.
         }

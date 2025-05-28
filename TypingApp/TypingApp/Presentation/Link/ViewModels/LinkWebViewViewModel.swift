@@ -8,7 +8,21 @@
 import Foundation
 import Combine
 
-final class LinkWebViewViewModel {
+struct LinkWebViewViewModelInput: ViewModelInput {
+    let viewDidLoad: AnyPublisher<Void, Never>
+}
+
+struct LinkWebViewViewModelOutput: ViewModelOutput {
+    let urlRequest: AnyPublisher<URLRequest, Never>
+}
+
+final class LinkWebViewViewModel: ViewModelProtocol {
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    typealias Input = LinkWebViewViewModelInput
+    typealias Output = LinkWebViewViewModelOutput
+    
     private let urlString: String
     private let urlRequestSubject = PassthroughSubject<URLRequest, Never>()
     
@@ -20,7 +34,19 @@ final class LinkWebViewViewModel {
         self.urlString = urlString
     }
     
-    func loadWebPage() {
+    func transform(input: LinkWebViewViewModelInput) -> LinkWebViewViewModelOutput {
+        input.viewDidLoad
+            .sink { [weak self] in
+                self?.loadWebPage()
+            }
+            .store(in: &cancellables)
+        
+        return Output(
+            urlRequest: urlRequestSubject.eraseToAnyPublisher()
+        )
+    }
+    
+    private func loadWebPage() {
         guard let url = URL(string: urlString) else { return }
         
         let request = URLRequest(url: url)

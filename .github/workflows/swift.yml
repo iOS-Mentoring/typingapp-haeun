@@ -27,9 +27,11 @@ jobs:
         xcodebuild -version
         
     - name: Build the project 🛠
+      working-directory: TypingApp
       run: |
         xcodebuild clean build -project TypingApp.xcodeproj -scheme TypingApp -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -skipPackagePluginValidation -skipMacroValidation
     
     - name: Run tests 🧪
+      working-directory: TypingApp
       run: |
         xcodebuild test -project TypingApp.xcodeproj -scheme TypingApp -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -skipPackagePluginValidation -skipMacroValidation

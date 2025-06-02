@@ -9,9 +9,10 @@ import UIKit
 import Combine
 
 final class HistoryViewController: UIViewController {
-    private let calendarViewModel = CalendarViewModel()
-    private lazy var calendarView = CalendarView(viewModel: calendarViewModel)
+    private lazy var calendarView = CalendarView()
     private let viewModel: HistoryViewModel
+    
+    private let viewDidLoadTrigger = PassthroughSubject<Void, Never>()
     
     private let historyContentView = HistoryContentView()
     
@@ -52,7 +53,7 @@ final class HistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupBindings()
+        bind()
     }
     
     private func setupUI() {
@@ -62,15 +63,42 @@ final class HistoryViewController: UIViewController {
         view.addSubview(todayButton, autoLayout: [.bottomSafeArea(30), .centerX(0)])
     }
     
-    private func setupBindings() {
-        calendarViewModel.selectedDayPublisher
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] day in
-                self?.historyContentView.configure(with: day)
+    private func bind() {
+        let input = HistoryViewModelInput(
+            viewDidLoad: viewDidLoadTrigger.eraseToAnyPublisher(),
+            dayIndexSelected: calendarView.daySelected.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        viewDidLoadTrigger.send()
+        
+        output.dayInfo
+            .sink { [weak self] dayInfo in
+                guard let self else { return }
+                calendarView.applySnapshot(items: dayInfo)
             }
             .store(in: &cancellables)
         
+        output.selectedDayIndex
+            .sink { [weak self] dayIndex in
+                guard let self else { return }
+                calendarView.updateSelectedCell(at: dayIndex)
+            }
+            .store(in: &cancellables)
+        
+        output.recordInfo
+            .sink { [weak self] recordState in
+                guard let self else { return }
+                switch recordState {
+                case .record(let record):
+                    self.historyContentView.configureWithRecord(record)
+                case .empty:
+                    self.historyContentView.configureEmpty()
+                }
+                
+            }
+            .store(in: &cancellables)
         
         let todayAction = UIAction { _ in
             //calendarViewModel.

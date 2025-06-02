@@ -77,9 +77,9 @@ final class TypoView: UIView {
         addSubview(stackView, autoLayout: [.leading(0), .bottom(0), .topNext(to: textView, constant: 30)])
     }
     
-    func configure(with info: TypoInfo) {
-        setTextViewAttributedText(text: info.text, isEmpty: info.title == nil)
-        titleLabel.text = info.title
-        authorLabel.text = info.author
+    func configure(typo: String, title: String?, author: String?) {
+        setTextViewAttributedText(text: typo, isEmpty: title == nil)
+        titleLabel.text = title
+        authorLabel.text = author
     }
 }

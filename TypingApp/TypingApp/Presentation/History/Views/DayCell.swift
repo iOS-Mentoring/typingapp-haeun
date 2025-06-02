@@ -10,6 +10,13 @@ import UIKit
 final class DayCell: UICollectionViewCell {
     static let reuseIdentifier = "DayCell"
     
+    private let weekdaySymbolLabel: UILabel = {
+        let label = UILabel()
+        label.font = .pretendard(type: .regular, size: 10)
+        label.textAlignment = .center
+        return label
+    }()
+    
     private let dayLabel: UILabel = {
         let label = UILabel()
         label.font = .pretendard(type: .bold, size: 14)
@@ -42,7 +49,8 @@ final class DayCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        addSubview(selectionIndicator, autoLayout: [.top(0), .height(30), .width(30), .centerX(0)])
+        addSubview(weekdaySymbolLabel, autoLayout: [.top(20), .centerX(0)])
+        addSubview(selectionIndicator, autoLayout: [.topNext(to: weekdaySymbolLabel, constant: 11), .height(30), .width(30), .centerX(0)])
         selectionIndicator.addSubview(dayLabel, autoLayout: [.center(0)])
         addSubview(typingIndicator, autoLayout: [.centerX(0), .topNext(to: selectionIndicator, constant: 5), .width(4), .height(4)])
     }
@@ -53,11 +61,14 @@ final class DayCell: UICollectionViewCell {
         typingIndicator.isHidden = true
     }
     
-    func configure(with day: DayModel, selected: Bool) {
-        dayLabel.text = day.dateString
+    func configure(with day: CalendarDay) {
+        weekdaySymbolLabel.text = day.date.formattedDateString(dateFormat: "EEE")
+        weekdaySymbolLabel.textColor = weekdaySymbolLabel.text == "Sun" ? .primaryRed : .primaryEmphasis
+        dayLabel.text = day.date.formattedDateString(dateFormat: "dd")
         
-        setSelected(selected)
         typingIndicator.isHidden = !day.hasTypingResult
+        dayLabel.textColor = day.isInValidRange ? .primaryEmphasis : .gray300
+        self.isUserInteractionEnabled = day.isInValidRange
     }
     
     func setSelected(_ selected: Bool) {

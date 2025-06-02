@@ -55,6 +55,12 @@ final class HistoryContentView: UIView {
         addSubview(backgroundImageView, autoLayout: [.top(0), .leadingSafeArea(-354), .height(1084), .width(1084)])
         addSubview(stackView, autoLayout: [.top(20), .leading(0), .trailing(0)])
         
+        stackView.addArrangedSubview(recordView)
+        recordView.autoLayout([.widthEqual(to: stackView, constant: 0)])
+        stackView.addArrangedSubview(emptyView)
+        stackView.addArrangedSubview(typoView)
+        stackView.addArrangedSubview(buttonStackView)
+        
         buttonStackView.addArrangedSubview(downloadButton)
         buttonStackView.addArrangedSubview(shareButton)
         buttonStackView.spacing = 8
@@ -62,26 +68,35 @@ final class HistoryContentView: UIView {
         shareButton.autoLayout([.width(36), .height(36)])
     }
     
-    func configure(with day: DayModel) {
-        for subview in stackView.arrangedSubviews {
-            stackView.removeArrangedSubview(subview)
-            subview.removeFromSuperview()
-        }
+    func configureWithRecord(_ record: TypingRecord) {
+        recordView.isHidden = false
+        emptyView.isHidden = true
+        buttonStackView.isHidden = false
         
-        if day.hasTypingResult {
-            stackView.addArrangedSubview(recordView)
-            recordView.autoLayout([.widthEqual(to: stackView, constant: 0)])
-            stackView.addArrangedSubview(typoView)
-            typoView.configure(with: TypoInfo(
-                text: "어른이 되는 것이 끔찍한 이유는 아무도 우리에게 관심이 없고, 앞으로는 스스로 모든 일을 처리하고 세상이 어떤 식으로 돌아가는지 파악해야 한다는 것을 깨닫는 순간이 찾아오기 때문이다.",
-                title: "불안한 사람들",
-                author: "프레드릭 베크만"
-            ))
-            stackView.addArrangedSubview(buttonStackView)
-        } else {
-            stackView.addArrangedSubview(emptyView)
-            stackView.addArrangedSubview(typoView)
-            typoView.configure(with: TypoInfo.empty)
-        }
+        recordView.configureRecord(
+            wpm: record.wpm,
+            acc: record.acc,
+            date: record.date
+        )
+        
+        typoView.configure(
+            typo: record.typing,
+            title: record.title,
+            author: record.author
+        )
     }
+    
+    func configureEmpty() {
+        recordView.isHidden = true
+        emptyView.isHidden = false
+        buttonStackView.isHidden = true
+        
+        typoView.configure(
+            typo: "필사된 정보가 없습니다.",
+            title: nil,
+            author: nil
+        )
+    }
+    
+    
 }

@@ -9,5 +9,9 @@ import UIKit
 import Combine
 
 final class CompleteViewModel {
+    let record: TypingRecord
     
+    init(record: TypingRecord) {
+        self.record = record
+    }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Record {
+struct TypingRecord {
     let wpm: Int
     let acc: Int
     let date: Date

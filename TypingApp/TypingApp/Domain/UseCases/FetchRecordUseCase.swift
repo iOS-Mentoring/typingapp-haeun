@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchRecordUseCaseProtocol: Sendable {
-    func execute(for date: Date) async throws -> Record
+    func execute(for date: Date) async throws -> TypingRecord
 }
 
 final class FetchRecordUseCase: FetchRecordUseCaseProtocol {
@@ -19,7 +19,7 @@ final class FetchRecordUseCase: FetchRecordUseCaseProtocol {
         self.repository = repository
     }
     
-    func execute(for date: Date) async throws -> Record {
+    func execute(for date: Date) async throws -> TypingRecord {
         return try await repository.fetchRecord(for: date)
     }
 }

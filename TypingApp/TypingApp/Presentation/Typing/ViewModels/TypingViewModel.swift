@@ -93,13 +93,9 @@ final class TypingViewModel: ViewModelProtocol {
     private func updateWpm() {
         guard let elapsedTime = currentElapsedTime, elapsedTime > 0 else { return }
         let wordsPerMinute = Double(correctCharacterCount) / elapsedTime * 60
-        //self.wpm = Int(wordsPerMinute)
         wpmSubject.send(Int(wordsPerMinute))
     }
     
-}
-
-extension TypingViewModel {
     func processInput(_ inputText: NSAttributedString) {
         if currentElapsedTime == nil {
             startTyping()
@@ -119,7 +115,14 @@ extension TypingViewModel {
         updateWpm()
     }
     
-    /*var attributedTextPublisher: AnyPublisher<NSAttributedString, Never> {
-        $attributedText.eraseToAnyPublisher()
-    }*/
+    func presentCompleteView() {
+        coordinator?.presentCompleteView(with: TypingRecord(
+            wpm: wpmSubject.value,
+            acc: 99,
+            date: Date(),
+            typing: typingInfoSubject.value.typing,
+            title: typingInfoSubject.value.title,
+            author: typingInfoSubject.value.author
+        ))
+    }
 }

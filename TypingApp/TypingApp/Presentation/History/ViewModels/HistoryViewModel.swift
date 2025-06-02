@@ -20,7 +20,7 @@ struct HistoryViewModelOutput: ViewModelOutput {
 }
 
 enum RecordDisplayState {
-    case record(Record)
+    case record(TypingRecord)
     case empty
 }
 

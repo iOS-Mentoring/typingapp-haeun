@@ -68,7 +68,7 @@ final class HistoryContentView: UIView {
         shareButton.autoLayout([.width(36), .height(36)])
     }
     
-    func configureWithRecord(_ record: Record) {
+    func configureWithRecord(_ record: TypingRecord) {
         recordView.isHidden = false
         emptyView.isHidden = true
         buttonStackView.isHidden = false

@@ -100,11 +100,7 @@ final class TypingViewController: UIViewController {
             .sink { [weak self] isTypingEnded in
                 guard let self else { return }
                 if isTypingEnded {
-                    let completeVM = CompleteViewModel()
-                    let completeVC = CompletePopupViewController(viewModel: completeVM)
-                    let navVC = UINavigationController(rootViewController: completeVC)
-                    navVC.modalPresentationStyle = .overFullScreen
-                    self.present(navVC, animated: true)
+                    viewModel.presentCompleteView()
                 }
             }
             .store(in: &cancellables)

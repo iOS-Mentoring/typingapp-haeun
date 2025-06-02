@@ -8,5 +8,5 @@
 import Foundation
 
 protocol RecordRepositoryProtocol: Sendable {
-    func fetchRecord(for date: Date) async throws -> Record
+    func fetchRecord(for date: Date) async throws -> TypingRecord
 }

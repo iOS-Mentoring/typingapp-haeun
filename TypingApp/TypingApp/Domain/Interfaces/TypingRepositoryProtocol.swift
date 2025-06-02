@@ -7,8 +7,6 @@
 
 import Combine
 
-protocol TypingRepositoryProtocol {
+protocol TypingRepositoryProtocol: Sendable {
     func fetchTypingInfo() async throws -> TypingInfo
-    
-    func fetchTypingInfoPublisher() -> AnyPublisher<TypingInfo, Error>
 }

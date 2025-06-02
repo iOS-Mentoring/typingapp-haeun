@@ -7,8 +7,8 @@
 
 import Combine
 
-protocol FetchTypngTextUseCaseProtocol {
-    func execute() -> AnyPublisher<TypingInfo, Error>
+protocol FetchTypngTextUseCaseProtocol: Sendable {
+    func execute() async throws -> TypingInfo
 }
 
 final class FetchTypngTextUseCase: FetchTypngTextUseCaseProtocol {
@@ -18,7 +18,7 @@ final class FetchTypngTextUseCase: FetchTypngTextUseCaseProtocol {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<TypingInfo, Error> {
-        return repository.fetchTypingInfoPublisher()
+    func execute() async throws -> TypingInfo {
+        return try await repository.fetchTypingInfo()
     }
 }

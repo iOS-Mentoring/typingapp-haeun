@@ -12,26 +12,6 @@ final class TypingRepository: TypingRepositoryProtocol {
     func fetchTypingInfo() async throws -> TypingInfo {
         return MockTypingData.typingInfo
     }
-    
-    func fetchTypingInfoPublisher() -> AnyPublisher<TypingInfo, any Error> {
-        return Just(MockTypingData.typingInfo)
-            .setFailureType(to: Error.self)
-            .eraseToAnyPublisher()
-        
-        /*return Deferred {
-            Future { promise in
-                Task {
-                    do {
-                        let typingData = try await self.fetchTypingInfo()
-                        promise(.success(typingData))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                }
-            }
-        }
-        .eraseToAnyPublisher()*/
-    }
 }
 
 final class MockTypingData {

@@ -30,8 +30,8 @@ final class TypingCoordinator: NSObject, Coordinator {
         router.show(linkWebViewController, style: .present)
     }
     
-    func presentCompleteView() {
-        let viewModel = CompleteViewModel()
+    func presentCompleteView(with record: TypingRecord) {
+        let viewModel = CompleteViewModel(record: record)
         let viewController = CompletePopupViewController(viewModel: viewModel)
         let navVC = UINavigationController(rootViewController: viewController)
         navVC.modalPresentationStyle = .overFullScreen

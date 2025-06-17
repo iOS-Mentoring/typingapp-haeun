@@ -16,6 +16,8 @@ final class TypingViewController: UIViewController {
     private let viewModel: TypingViewModel
     private var cancellables = Set<AnyCancellable>()
     
+    private let viewDidLoadTrigger = PassthroughSubject<Void, Never>()
+    
     init(viewModel: TypingViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -43,7 +45,7 @@ final class TypingViewController: UIViewController {
     }
     
     private func setTextView() {
-        layeredTextView.configure(with: viewModel, inputAccessoryView: typingInputAccessoryView)
+        layeredTextView.configure(inputAccessoryView: typingInputAccessoryView)
         view.addSubview(layeredTextView, autoLayout: [.topNext(to: speedView, constant: 0), .leading(0), .trailing(0), .bottom(0)])
     }
     
@@ -55,40 +57,50 @@ final class TypingViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.$typingInfo
-            .receive(on: DispatchQueue.main)
+        let input = TypingViewModelInput(
+            viewDidLoad: viewDidLoadTrigger.eraseToAnyPublisher(),
+            textViewDidChange: layeredTextView.textViewDidChange.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        viewDidLoadTrigger.send()
+        
+        output.typingInfo
             .sink { [weak self] typingInfo in
-                guard let self = self, let typingInfo = typingInfo else { return }
+                guard let self else { return }
                 self.layeredTextView.setPlaceholderText(typingInfo.typing)
                 typingInputAccessoryView.configure(with: typingInfo.title, author: typingInfo.author)
                 configureLinkButton(with: typingInfo.url)
             }
             .store(in: &cancellables)
         
-        viewModel.$elapsedTimeString
-            .receive(on: DispatchQueue.main)
+        output.elapsedTimeString
             .sink { [weak self] elapsedTimeString in
                 guard let self else { return }
                 self.speedView.updateTimeLabel(elapsedTimeString)
             }
             .store(in: &cancellables)
         
-        viewModel.$wpm
-            .receive(on: DispatchQueue.main)
+        output.wpm
             .sink { [weak self] wpm in
-                self?.speedView.updateWpmLabel(wpm)
+                guard let self else { return }
+                self.speedView.updateWpmLabel(wpm)
             }
             .store(in: &cancellables)
         
-        viewModel.$isTypingEnded
-            .receive(on: DispatchQueue.main)
+        output.attributedText
+            .sink { [weak self] attributedText in
+                guard let self else { return }
+                self.layeredTextView.updateText(text: attributedText)
+            }
+            .store(in: &cancellables)
+        
+        output.isTypingEnded
             .sink { [weak self] isTypingEnded in
+                guard let self else { return }
                 if isTypingEnded {
-                    let completeVM = CompleteViewModel()
-                    let completeVC = CompletePopupViewController(viewModel: completeVM)
-                    let navVC = UINavigationController(rootViewController: completeVC)
-                    navVC.modalPresentationStyle = .overFullScreen
-                    self?.present(navVC, animated: true)
+                    viewModel.presentCompleteView()
                 }
             }
             .store(in: &cancellables)

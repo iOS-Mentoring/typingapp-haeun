@@ -8,11 +8,6 @@
 import UIKit
 import Combine
 
-protocol TextProcessing {
-    func processInput(_ inputText: NSAttributedString)
-    var attributedTextPublisher: AnyPublisher<NSAttributedString, Never> { get }
-}
-
 final class LayeredTextView: UIView {
     private let placeholderTextView: UITextView = {
         let textView = UITextView()
@@ -38,8 +33,12 @@ final class LayeredTextView: UIView {
         return textView
     }()
     
+    private let textViewDidChangeTrigger = PassthroughSubject<NSAttributedString, Never>()
+    var textViewDidChange: AnyPublisher<NSAttributedString, Never> {
+        textViewDidChangeTrigger.eraseToAnyPublisher()
+    }
+    
     private var cancellables = Set<AnyCancellable>()
-    private var processor: TextProcessing?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,18 +49,13 @@ final class LayeredTextView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with processor: TextProcessing, inputAccessoryView: TypingInputAccessoryView) {
-        self.processor = processor
-        
-        processor.attributedTextPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] attributedText in
-                self?.typingTextView.attributedText = attributedText
-            }
-            .store(in: &cancellables)
-        
+    func configure(inputAccessoryView: TypingInputAccessoryView) {
         typingTextView.delegate = self
         typingTextView.inputAccessoryView = inputAccessoryView
+    }
+    
+    func updateText(text: NSAttributedString) {
+        self.typingTextView.attributedText = text
     }
     
     func setPlaceholderText(_ text: String) {
@@ -134,7 +128,8 @@ extension LayeredTextView {
 
 extension LayeredTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        processor?.processInput(textView.attributedText)
+        //processor?.processInput(textView.attributedText)
+        textViewDidChangeTrigger.send(textView.attributedText)
         scrollToVisible(textView: textView)
     }
     

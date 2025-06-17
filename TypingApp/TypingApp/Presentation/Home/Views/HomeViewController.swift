@@ -89,7 +89,7 @@ final class HomeViewController: UIViewController {
         stackView.addArrangedSubview(pilsaButton)
         stackView.addArrangedSubview(challengeButton)
         
-        view.addSubview(stackView, autoLayout: [.leading(25), .bottomSafeArea(25), .trailing(25)])
-        pilsaButton.autoLayout([.widthEqual(to: challengeButton, constant: 1), .heightEqual(to: challengeButton, constant: 1), .aspectRatio(CGFloat(165/160))])
+        view.addSubview(stackView, autoLayout: [.leading(25), .bottomSafeArea(25), .trailing(25), .height(165)])
+        pilsaButton.autoLayout([.widthEqual(to: challengeButton, constant: 1)])
     }
 }

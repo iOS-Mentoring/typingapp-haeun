@@ -8,6 +8,10 @@
 import UIKit
 
 final class RecordView: UIStackView {
+    private let wpmRecordView = RecordContentView(titleText: "WPM")
+    private let accRecordView = RecordContentView(titleText: "ACC")
+    private let dateRecordView = RecordContentView(titleText: "Date", isLastItem: true)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -27,9 +31,6 @@ final class RecordView: UIStackView {
         alignment = .center
         distribution = .fill
         autoLayout([.height(88)])
-        let wpmRecordView = RecordContentView(titleText: "WPM", contentText: "0")
-        let accRecordView = RecordContentView(titleText: "ACC", contentText: "0")
-        let dateRecordView = RecordContentView(titleText: "Date", contentText: "0", isLastItem: true)
         
         let recordViews = [wpmRecordView, accRecordView, dateRecordView]
         recordViews.forEach { addArrangedSubview($0) }
@@ -38,5 +39,11 @@ final class RecordView: UIStackView {
                 view.autoLayout([.widthEqual(to: wpmRecordView, constant: 0)])
             }
         }
+    }
+    
+    func configureRecord(wpm: Int, acc: Int, date: Date) {
+        wpmRecordView.configure(content: String(wpm))
+        accRecordView.configure(content: String(acc))
+        dateRecordView.configure(content: date.formattedDateString(dateFormat: "MMM dd"))
     }
 }

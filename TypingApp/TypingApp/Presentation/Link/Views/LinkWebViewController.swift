@@ -18,6 +18,7 @@ final class LinkWebViewController: UIViewController {
     }()
     
     private let viewModel: LinkWebViewViewModel
+    private let viewDidLoadTrigger = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     init(viewModel: LinkWebViewViewModel) {
@@ -32,20 +33,27 @@ final class LinkWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        bindViewModel()
-        viewModel.loadWebPage()
+        bind()
     }
     
     private func setupUI() {
         view.addSubview(webView, autoLayout: [.bottomSafeArea(0), .leadingSafeArea(0), .trailingSafeArea(0), .topSafeArea(0)])
     }
     
-    private func bindViewModel() {
-        viewModel.urlRequest
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] request in
-                self?.webView.load(request)
+    private func bind() {
+        let input = LinkWebViewViewModelInput(
+            viewDidLoad: viewDidLoadTrigger.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(input: input)
+        
+        output.urlRequest
+            .sink { [weak self] urlRequest in
+                guard let self else { return }
+                self.webView.load(urlRequest)
             }
             .store(in: &cancellables)
+        
+        viewDidLoadTrigger.send()
     }
 }

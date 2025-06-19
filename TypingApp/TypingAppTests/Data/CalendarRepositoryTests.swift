@@ -29,11 +29,10 @@ struct CalendarRepositoryTests {
         let uniqueDates = Set(dates.map { Calendar.current.startOfDay(for: $0) })
         #expect(uniqueDates.count == dates.count)
         
+        // 범위를 벗어난 날짜가 없는지 확인
         let calendar = Calendar.current
         let minDate = calendar.date(from: DateComponents(year: 2025, month: 2, day: 1))!
         let maxDate = Date()
-        
-        // 범위를 벗어난 날짜가 없는지 확인
         let hasInvalidDate = dates.contains { date in
             date < minDate || date > maxDate
         }

@@ -24,7 +24,7 @@ final class CalendarUseCase: CalendarUseCaseProtocol {
         let resultDates = try await repository.fetchCalendarDate()
         
         let sortedResultDates = resultDates.sorted()
-        let earliestDate = sortedResultDates.first!
+        let earliestDate = sortedResultDates.first ?? Date()
         let today = Date()
         
         let resultDateSet = Set(sortedResultDates.map { calendar.startOfDay(for: $0) })

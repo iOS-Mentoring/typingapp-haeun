@@ -11,8 +11,6 @@ import Foundation
 
 struct FetchCalendarUseCaseTests {
     
-    let usecase = CalendarUseCase(repository: CalendarRepository())
-    
     private func createUseCase(with mockDates: [Date] = []) -> (CalendarUseCase, MockCalendarRepository) {
         let mockRepository = MockCalendarRepository()
         mockRepository.mockDates = mockDates

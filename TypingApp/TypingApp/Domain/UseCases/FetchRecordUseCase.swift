@@ -5,7 +5,6 @@
 //  Created by Haeun Kwon on 5/26/25.
 //
 
-import Combine
 import Foundation
 
 protocol FetchRecordUseCaseProtocol: Sendable {
